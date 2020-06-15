@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-  <title>Stencil Component Starter</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+    <title>Intervention Request</title>
 
-  <script type="module" src="/build/intervention-request.esm.js"></script>
-  <script nomodule src="/build/intervention-request.js"></script>
+    <script type="module" src="/build/intervention-request.esm.js"></script>
+    <script nomodule src="/build/intervention-request.js"></script>
 
 </head>
 <body>
 
-  <my-component first="Stencil" last="'Don't call me a framework' JS"></my-component>
+    <intervention-request
+        alt="Cherry Blossom"
+        src="cherry-blossom.jpg"
+    >
+        <p slot="before">© 2020 Cherry Blossom</p>
+    </intervention-request>
 
 </body>
 </html>

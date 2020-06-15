@@ -5,57 +5,40 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { InterventionRequestOptions } from "~/@types";
 export namespace Components {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first": string;
-        /**
-          * The last name
-         */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
+    interface InterventionRequest {
+        "alt": string;
+        "options"?: InterventionRequestOptions;
+        "src": string;
     }
 }
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
+    interface HTMLInterventionRequestElement extends Components.InterventionRequest, HTMLStencilElement {
     }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
+    var HTMLInterventionRequestElement: {
+        prototype: HTMLInterventionRequestElement;
+        new (): HTMLInterventionRequestElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
+        "intervention-request": HTMLInterventionRequestElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first"?: string;
-        /**
-          * The last name
-         */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
+    interface InterventionRequest {
+        "alt"?: string;
+        "options"?: InterventionRequestOptions;
+        "src"?: string;
     }
     interface IntrinsicElements {
-        "my-component": MyComponent;
+        "intervention-request": InterventionRequest;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "intervention-request": LocalJSX.InterventionRequest & JSXBase.HTMLAttributes<HTMLInterventionRequestElement>;
         }
     }
 }
