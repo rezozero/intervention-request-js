@@ -39,20 +39,11 @@ export class InterventionRequestPicture {
      * Default media options
      */
     private defaultMediaOptions: InterventionRequestMediaFormat = {
-        quality: 85,
         progressive: true,
         rule: '100vw'
     }
 
     private isWebp: boolean = this.src?.split('.').pop().toLowerCase() === 'webp'
-
-    private path(media: string): string {
-        return `${ this.baseUrl }/f1280x760/${ media }.webp`
-    }
-
-    private buildSourceElement(): HTMLSourceElement {
-        return document.createElement('source')
-    }
 
     componentWillLoad(): void {
         console.group('*** picture will load ***')
@@ -73,36 +64,127 @@ export class InterventionRequestPicture {
         }
     }
 
-    componentWillRender(): void {
+    private buildPicture(): HTMLPictureElement {
+        /**
+         * @todo retrieve ampersand & preferwebp from selected strategy
+         */
+        const ampersand = '-'
+        const preferWebp = true
+        let sources: Array<any> = []
+
         if (this.formats && this.formats.length) {
-            this.formats.forEach(
-                (format: InterventionRequestFormat): void => {
+            /**
+             * Loop thru formats
+             * Define all <source>
+             */
+            sources = this.formats.map(
+                (format: InterventionRequestFormat, formatIndex: number): Array<HTMLSourceElement> => {
+                    let srcset: Array<string> = []
+                    let sources: Array<HTMLSourceElement> = []
+                    let fallbackSources!: string
+
+                    /**
+                     * Generate srcset
+                     * foreach srcset rules
+                     */
                     if (format.srcset && format.srcset.length) {
-                        format.srcset = format.srcset.map(
-                            (source: InterventionRequestMediaFormat): InterventionRequestMediaFormat => {
-                                return {
+                        /**
+                         * Loop thru srcset
+                         * Define all srcset for responsive behavior
+                         */
+                        srcset = format.srcset.map(
+                            (source: InterventionRequestMediaFormat, sourceIndex: number): string => {
+                                let operations = []
+
+                                /**
+                                 * Applying default media options
+                                 */
+                                source = {
                                     ...this.defaultMediaOptions,
                                     ...source
                                 }
+
+                                /**
+                                 * Build image operations
+                                 * @todo fill w/ all available operations
+                                 * @todo set params from selected strategy
+                                 */
+                                if (source.fit) {
+                                    operations.push(`f${source.fit}`)
+                                }
+
+                                if (source.quality) {
+                                    operations.push(`q${source.quality}`)
+                                }
+
+                                if (source.progressive) {
+                                    operations.push(`p${source.progressive ? 1 : 0}`)
+                                }
+
+                                if (formatIndex === this.formats.length -1 && sourceIndex === format.srcset.length - 1) {
+                                    fallbackSources = `${this.baseUrl}/${operations.join(ampersand)}/${this.src}`
+                                }
+
+                                return `${this.baseUrl}/${operations.join(ampersand)}/${this.src} ${source.rule}`
                             }
                         )
                     }
+
+                    /**
+                     * Generate webp source
+                     * for non webp
+                     * and only if preferWebp is true
+                     */
+                    if (preferWebp && !this.isWebp) {
+                        sources.push(
+                            <source
+                                type={ 'image/webp' }
+                                media={ format.media }
+                                sizes={ format.sizes }
+                                srcSet={ srcset.join(',').replace(new RegExp(this.src, 'g'), `${this.src}.webp`) } />
+                        )
+                    }
+
+                    /**
+                     * Generate common source
+                     * Regardless of media type
+                     */
+                    sources.push(
+                        <source
+                            media={ format.media }
+                            sizes={ format.sizes }
+                            srcSet={ srcset.join(',') } />
+                    )
+
+                    /**
+                     * Generate fallback
+                     */
+                    if (fallbackSources) {
+                        sources.push(
+                            <img
+                                src={ fallbackSources }
+                                sizes={ format.sizes }
+                                srcSet={ srcset.join(',') }
+                                alt={ this.alt } />
+                        )
+                    }
+
+                    return sources
                 }
             )
         }
+
+        return (
+            <picture>
+                { sources }
+            </picture>
+        )
     }
 
     render(): HTMLInterventionRequestPictureElement {
-        /*
-        <source srcSet={this.path(this.src)} type={'image/webp'}/>
-        <source srcSet={`${this.baseUrl}/f1280x760/${this.src}`}/>
-        <img src={`${this.baseUrl}/f1280x760/${this.src}`} alt={this.alt}/>
-        */
         return (
             <Host>
-                <picture>
-
-                </picture>
+                { this.buildPicture() }
             </Host>
         );
     }

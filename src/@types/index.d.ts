@@ -4,6 +4,11 @@ declare global {
     }
 }
 
+export interface IntrventionRequestStrategy {
+    ampersand?: string
+    preferWebp?: boolean
+}
+
 export interface InterventionRequestConfigurations {
     strategy?: string
     baseUrl?: string,

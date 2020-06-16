@@ -1,4 +1,4 @@
-import { Component, Prop, Host, h } from '@stencil/core'
+import { Element, Component, Prop, Host, h } from '@stencil/core'
 import { InterventionRequestFormats } from '~/@types'
 
 @Component({
@@ -8,6 +8,8 @@ import { InterventionRequestFormats } from '~/@types'
 })
 
 export class InterventionRequest {
+    @Element() el: HTMLElement;
+
     /**
      * Source
      */
@@ -59,6 +61,8 @@ export class InterventionRequest {
             const formats = JSON.parse(this.formats)
 
             this.formatsObject = formats.length ? formats : new Array(formats)
+
+            // this.el.removeAttribute('formats')
         }
     }
 

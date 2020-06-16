@@ -12,7 +12,16 @@
         src="cherry-blossom.jpg"
         base-url="http://localhost:8484/assets"
         classes="class1,class2"
-        formats='[{"media":"screen","sizes":"100vw","srcset":[{"fit":"800x600", "quality":100}]}]'
+        formats='[{"media":"screen","sizes":"50vw","srcset":[{"fit":"800x600", "rule": "800w"}, {"fit":"1200x800", "rule": "1200w"}]}]'
+    >
+        <p slot="before">© 2020 Cherry Blossom</p>
+    </intervention-request>
+
+    <intervention-request
+            alt="Cherry Blossom"
+            src="cherry-blossom.jpg"
+            base-url="http://localhost:8484/assets"
+            formats='[{"srcset":[{"fit":"800x600", "rule": "800w"}, {"fit":"1200x800", "rule": "1200w"}]}]'
     >
         <p slot="before">© 2020 Cherry Blossom</p>
     </intervention-request>
@@ -37,10 +46,11 @@
             strategy: 'default',
             baseUrl: 'http://intervention.local/assets',
             defaultMediaOptions: {
-                quality: 90,
+                quality: 1,
                 progressive: false
             }
         }
+
     </script>
 
     <script type="module" src="/build/intervention-request.esm.js"></script>
