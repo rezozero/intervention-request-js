@@ -4,19 +4,47 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
     <title>Intervention Request</title>
-
-    <script type="module" src="/build/intervention-request.esm.js"></script>
-    <script nomodule src="/build/intervention-request.js"></script>
-
 </head>
 <body>
 
     <intervention-request
         alt="Cherry Blossom"
         src="cherry-blossom.jpg"
+        base-url="http://localhost:8484/assets"
+        classes="class1,class2"
+        formats='[{"media":"screen","sizes":"100vw","srcset":[{"fit":"800x600", "quality":100}]}]'
     >
         <p slot="before">© 2020 Cherry Blossom</p>
     </intervention-request>
+
+    <intervention-request
+        alt="Image sans source"
+        strategy="window.strategy">
+    </intervention-request>
+
+    <intervention-request
+        src="https://res.cloudinary.com/demo/image/upload/w_0.5/sample.jpg"
+        classes="class1 class2"
+        embed>
+    </intervention-request>
+
+    <script>
+        /**
+         * Override intervention request default configurations
+         * @type InterventionRequestConfigurations
+         */
+        window.interventionRequestJS = {
+            strategy: 'default',
+            baseUrl: 'http://intervention.local/assets',
+            defaultMediaOptions: {
+                quality: 90,
+                progressive: false
+            }
+        }
+    </script>
+
+    <script type="module" src="/build/intervention-request.esm.js"></script>
+    <script nomodule src="/build/intervention-request.js"></script>
 
 </body>
 </html>

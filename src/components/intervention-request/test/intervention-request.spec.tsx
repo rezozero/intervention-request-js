@@ -1,12 +1,12 @@
-import {newSpecPage} from '@stencil/core/testing';
-import { InterventionRequest } from '~/components/intervention-request/intervention-request';
+import { newSpecPage } from '@stencil/core/testing'
+import { InterventionRequest } from '~/components/intervention-request/intervention-request'
 
 describe('intervention-request', () => {
     it('renders', async () => {
         const page = await newSpecPage({
             components: [InterventionRequest],
             html: `<intervention-request></intervention-request>`,
-        });
+        })
 
         expect(page.root).toEqualHtml(
             `<intervention-request>
@@ -14,6 +14,6 @@ describe('intervention-request', () => {
                     <slot></slot>
                 </mock:shadow-root>
             </intervention-request>`
-        );
+        )
     });
 });

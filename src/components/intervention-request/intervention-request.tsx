@@ -1,5 +1,5 @@
-import { Component, Prop, Host, h} from '@stencil/core'
-import { InterventionRequestOptions } from '~/@types'
+import { Component, Prop, Host, h } from '@stencil/core'
+import { InterventionRequestFormats } from '~/@types'
 
 @Component({
     tag: 'intervention-request',
@@ -8,34 +8,75 @@ import { InterventionRequestOptions } from '~/@types'
 })
 
 export class InterventionRequest {
-    @Prop() src: string
-    @Prop() alt: string
-    @Prop() options?: InterventionRequestOptions
-
-    protected baseUrl: string = 'http://intervention.local/assets'
+    /**
+     * Source
+     */
+    @Prop() src!: string
 
     /**
-     * Generate fullpath
-     * @param media
-     * @return media full path
+     * Alt attribute
      */
-    protected path(media: string): string {
-        return `${ this.baseUrl }/f1280x760/${ media }.webp`
+    @Prop() alt: string
+
+    /**
+     * Lazyload
+     */
+    @Prop() lazy?: boolean
+
+    /**
+     * Classes
+     * Component additionnal classnames
+     */
+    @Prop() classes?: string
+
+    /**
+     * Strategy
+     */
+    @Prop() strategy?: string
+
+    /**
+     * Base URL
+     */
+    @Prop() baseUrl?: string
+
+    /**
+     * Source list
+     */
+    @Prop() formats?: string
+
+    /**
+     * Embed mode
+     * Use <iframe> if true
+     */
+    @Prop() embed: boolean = false
+
+    private formatsObject?: InterventionRequestFormats
+
+    private component: string = this.embed ? 'intervention-request-iframe' : 'intervention-request-picture'
+
+    componentWillRender (): void {
+        if (this.formats) {
+            const formats = JSON.parse(this.formats)
+
+            this.formatsObject = formats.length ? formats : new Array(formats)
+        }
     }
 
-    /**
-     * Component renderer
-     */
-    render(): HTMLElement {
+    render(): HTMLInterventionRequestElement {
         return (
-            <Host>
+            <Host class={ this.classes?.split(',').join(' ') }>
                 <slot name="before" />
-                <picture>
-                    <img src={ this.path(this.src) } alt={ this.alt } />
-                </picture>
+                { this.src &&
+                    <this.component
+                        src={ this.src }
+                        alt={ this.alt }
+                        formats={ this.formatsObject }
+                        strategy={ this.strategy }
+                        baseUrl={ this.baseUrl }
+                    />
+                }
                 <slot />
             </Host>
         )
     }
-
 }
