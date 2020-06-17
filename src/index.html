@@ -4,33 +4,41 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
     <title>Intervention Request</title>
+    <style>
+        * { margin: 0; padding: 0; }
+    </style>
 </head>
 <body>
-
+    <p>1</p>
     <intervention-request
         alt="Cherry Blossom"
         src="cherry-blossom.jpg"
-        base-url="http://localhost:8484/assets"
-        classes="class1,class2"
-        formats='[{"media":"screen","sizes":"50vw","srcset":[{"fit":"800x600", "rule": "800w"}, {"fit":"1200x800", "rule": "1200w"}]}]'
-    >
-        <p slot="before">© 2020 Cherry Blossom</p>
+        formats='[{"srcset":[{"fit":"800x600", "rule": "800w"}, {"fit":"1200x800", "rule": "1200w"}, {"fit":"1920x1080", "rule": "1920w"}]}]'>
     </intervention-request>
 
+    <p>2</p>
     <intervention-request
-            alt="Cherry Blossom"
-            src="cherry-blossom.jpg"
-            base-url="http://localhost:8484/assets"
-            formats='[{"srcset":[{"fit":"800x600", "rule": "800w"}, {"fit":"1200x800", "rule": "1200w"}]}]'
-    >
-        <p slot="before">© 2020 Cherry Blossom</p>
+        alt="Cherry Blossom"
+        src="cherry-blossom.jpg"
+        classes="class1,class2"
+        base-url="http://localhost:8484/assets"
+        formats='[{"media":"(max-width: 1024px)","sizes":"100vw","srcset":[{"fit":"300x300", "rule": "300w"}, {"fit":"600x600", "rule": "600w"}, {"fit":"1200x1200", "rule": "1200w"}]}, {"media":"screen","sizes":"50vw","srcset":[{"fit":"800x600", "rule": "800w"}, {"fit":"1200x800", "rule": "1200w"}]}]'>
     </intervention-request>
 
+    <p>3</p>
     <intervention-request
         alt="Image sans source"
-        strategy="window.strategy">
+        strategy="default">
     </intervention-request>
 
+    <p>4</p>
+    <intervention-request
+        src="sample.jpg"
+        strategy="cloudinary"
+        formats='[{"srcset":[{"width":800, "rule": "800w"}, {"width":1200, "rule": "1200w"}]}]'>
+    </intervention-request>
+
+    <p>5</p>
     <intervention-request
         src="https://res.cloudinary.com/demo/image/upload/w_0.5/sample.jpg"
         classes="class1 class2"
@@ -43,11 +51,32 @@
          * @type InterventionRequestConfigurations
          */
         window.interventionRequestJS = {
+            /**
+             * Default strategy
+             * Applied on each element without strategy props provided
+             */
             strategy: 'default',
-            baseUrl: 'http://intervention.local/assets',
+
+            /**
+             * Strategies config overrides
+             */
+            strategies: {
+                default: { baseUrl: 'http://intervention.local/assets' },
+                cloudinary: { baseUrl: 'https://res.cloudinary.com/demo/image/upload' }
+
+                /**
+                 * New strategy can be added here
+                 * @type InterventionRequestStrategy
+                 */
+            },
+
+            /**
+             * Default media options
+             * Applied on every media if no props override provided
+             */
             defaultMediaOptions: {
-                quality: 1,
-                progressive: false
+                quality: 100,
+                progressive: 0
             }
         }
 

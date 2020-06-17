@@ -1,4 +1,4 @@
-import { format } from './utils';
+import { format } from '~/utils/utils';
 
 describe('format', () => {
     it('returns empty string for no names defined', () => {

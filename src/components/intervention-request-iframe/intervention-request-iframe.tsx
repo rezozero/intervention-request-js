@@ -1,11 +1,16 @@
 import { Component, Prop, Host, h } from '@stencil/core'
-import { InterventionRequestFormats } from '~/@types'
 
+/**
+ * InterventionRequest Iframe
+ * @description Iframe component
+ * @author ravorona
+ *
+ * @todo fill attributes
+ */
 @Component({
     tag: 'intervention-request-iframe',
     shadow: true,
 })
-
 export class InterventionRequestIframe {
     /**
      * Image source
@@ -22,9 +27,11 @@ export class InterventionRequestIframe {
      */
     @Prop() formats?: InterventionRequestFormats
 
-    @Prop() strategy: string
-    @Prop() baseUrl: string
-
+    /**
+     * Component render
+     * Component lifecycle method
+     * @return HTMLInterventionRequestIframeElement
+     */
     render(): HTMLInterventionRequestIframeElement {
         return (
             <Host>

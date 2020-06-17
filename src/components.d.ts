@@ -5,7 +5,6 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { InterventionRequestFormats } from "~/@types";
 export namespace Components {
     interface InterventionRequest {
         /**
@@ -17,11 +16,11 @@ export namespace Components {
          */
         "baseUrl"?: string;
         /**
-          * Classes Component additionnal classnames
+          * Component additionnal classnames
          */
         "classes"?: string;
         /**
-          * Embed mode Use <iframe> if true
+          * Embed mode - Use iframe if true
          */
         "embed": boolean;
         /**
@@ -46,7 +45,6 @@ export namespace Components {
           * Image alt attribute
          */
         "alt": string;
-        "baseUrl": string;
         /**
           * Source list
          */
@@ -55,7 +53,6 @@ export namespace Components {
           * Image source
          */
         "src": string;
-        "strategy": string;
     }
     interface InterventionRequestPicture {
         /**
@@ -66,11 +63,16 @@ export namespace Components {
           * Base URL
           * @default assets
          */
-        "baseUrl": string;
+        "baseUrl"?: string;
         /**
           * Source list
          */
         "formats"?: InterventionRequestFormats;
+        /**
+          * Lazy load
+          * @default true
+         */
+        "lazy"?: boolean;
         /**
           * Image source
          */
@@ -118,11 +120,11 @@ declare namespace LocalJSX {
          */
         "baseUrl"?: string;
         /**
-          * Classes Component additionnal classnames
+          * Component additionnal classnames
          */
         "classes"?: string;
         /**
-          * Embed mode Use <iframe> if true
+          * Embed mode - Use iframe if true
          */
         "embed"?: boolean;
         /**
@@ -147,7 +149,6 @@ declare namespace LocalJSX {
           * Image alt attribute
          */
         "alt"?: string;
-        "baseUrl"?: string;
         /**
           * Source list
          */
@@ -156,7 +157,6 @@ declare namespace LocalJSX {
           * Image source
          */
         "src": string;
-        "strategy"?: string;
     }
     interface InterventionRequestPicture {
         /**
@@ -172,6 +172,11 @@ declare namespace LocalJSX {
           * Source list
          */
         "formats"?: InterventionRequestFormats;
+        /**
+          * Lazy load
+          * @default true
+         */
+        "lazy"?: boolean;
         /**
           * Image source
          */

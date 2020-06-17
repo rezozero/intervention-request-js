@@ -1,8 +1,14 @@
+/**
+ * InterventionRequest Utilz
+ * @description Useful functions
+ * @author ravorona
+ */
 
-export function format(first: string, middle: string, last: string): string {
-    return (
-        (first || '') +
-        (middle ? ` ${middle}` : '') +
-        (last ? ` ${last}` : '')
-    );
+/**
+ * Check if file contain webp extension
+ * @param filename
+ * @return boolean
+ */
+export function isWebp(filename: string): boolean {
+    return filename.split('.').pop().toLowerCase() === 'webp'
 }

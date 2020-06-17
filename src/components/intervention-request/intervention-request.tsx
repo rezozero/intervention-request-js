@@ -1,13 +1,19 @@
 import { Element, Component, Prop, Host, h } from '@stencil/core'
-import { InterventionRequestFormats } from '~/@types'
 
+/**
+ * InterventionRequest
+ * @description Wrapper component
+ * @author ravorona
+ */
 @Component({
     tag: 'intervention-request',
     styleUrl: 'intervention-request.css',
     shadow: true,
 })
-
 export class InterventionRequest {
+    /**
+     * Component element reference
+     */
     @Element() el: HTMLElement;
 
     /**
@@ -26,7 +32,6 @@ export class InterventionRequest {
     @Prop() lazy?: boolean
 
     /**
-     * Classes
      * Component additionnal classnames
      */
     @Prop() classes?: string
@@ -47,25 +52,36 @@ export class InterventionRequest {
     @Prop() formats?: string
 
     /**
-     * Embed mode
-     * Use <iframe> if true
+     * Embed mode - Use iframe if true
      */
     @Prop() embed: boolean = false
 
-    private formatsObject?: InterventionRequestFormats
 
+    private formatsObject?: InterventionRequestFormats
     private component: string = this.embed ? 'intervention-request-iframe' : 'intervention-request-picture'
 
+    /**
+     * Component will render
+     * Component lifecycle method
+     * @return void
+     */
     componentWillRender (): void {
         if (this.formats) {
             const formats = JSON.parse(this.formats)
 
+            /**
+             * Convert formats to array if needed
+             * for a consistent processing
+             */
             this.formatsObject = formats.length ? formats : new Array(formats)
-
-            // this.el.removeAttribute('formats')
         }
     }
 
+    /**
+     * Component render
+     * Component lifecycle method
+     * @return HTMLInterventionRequestElement
+     */
     render(): HTMLInterventionRequestElement {
         return (
             <Host class={ this.classes?.split(',').join(' ') }>

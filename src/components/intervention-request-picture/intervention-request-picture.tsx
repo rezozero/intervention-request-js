@@ -1,12 +1,20 @@
 import { Component, Prop, Host, h } from '@stencil/core'
-import { InterventionRequestMediaFormat, InterventionRequestFormats, InterventionRequestFormat } from '~/@types'
+import strategies from '~/strategies/index'
+import Strategy from '~/utils/strategy'
+import { isWebp } from '~/utils/utils'
 
+/**
+ * InterventionRequest Picture
+ * @description Picture component
+ * @author ravorona
+ *
+ * @todo lazyloading
+ */
 @Component({
     tag: 'intervention-request-picture',
     styleUrl: 'intervention-request-picture.css',
     shadow: true,
 })
-
 export class InterventionRequestPicture {
     /**
      * Image source
@@ -33,43 +41,30 @@ export class InterventionRequestPicture {
      * Base URL
      * @default assets
      */
-    @Prop() baseUrl: string = window.interventionRequestJS.baseUrl || 'assets'
+    @Prop() baseUrl?: string
+
 
     /**
-     * Default media options
+     * Lazy load
+     * @default true
      */
-    private defaultMediaOptions: InterventionRequestMediaFormat = {
-        progressive: true,
-        rule: '100vw'
-    }
+    @Prop() lazy?: boolean = window.interventionRequestJS.lazy
 
-    private isWebp: boolean = this.src?.split('.').pop().toLowerCase() === 'webp'
+    private strategyInstance: Strategy = strategies[this.strategy] as Strategy
+    private isWebp: boolean = isWebp(this.src)
 
-    componentWillLoad(): void {
-        console.group('*** picture will load ***')
-        console.info('strategy:', this.strategy)
-        console.info('source:', this.src)
-        console.log('formats:', this.formats)
-        console.groupEnd()
+    /**
+     * Component wiill load
+     * Component lifecycle method
+     * @return void
+     */
+    componentWillLoad(): void {}
 
-        /**
-         * Override default media options
-         * If global configuration is set
-         */
-        if (window.interventionRequestJS.defaultMediaOptions) {
-            this.defaultMediaOptions = {
-                ...this.defaultMediaOptions,
-                ...window.interventionRequestJS.defaultMediaOptions
-            }
-        }
-    }
-
+    /**
+     * Build picture tag
+     * @return HTMLPictureElement
+     */
     private buildPicture(): HTMLPictureElement {
-        /**
-         * @todo retrieve ampersand & preferwebp from selected strategy
-         */
-        const ampersand = '-'
-        const preferWebp = true
         let sources: Array<any> = []
 
         if (this.formats && this.formats.length) {
@@ -94,38 +89,11 @@ export class InterventionRequestPicture {
                          */
                         srcset = format.srcset.map(
                             (source: InterventionRequestMediaFormat, sourceIndex: number): string => {
-                                let operations = []
-
-                                /**
-                                 * Applying default media options
-                                 */
-                                source = {
-                                    ...this.defaultMediaOptions,
-                                    ...source
-                                }
-
-                                /**
-                                 * Build image operations
-                                 * @todo fill w/ all available operations
-                                 * @todo set params from selected strategy
-                                 */
-                                if (source.fit) {
-                                    operations.push(`f${source.fit}`)
-                                }
-
-                                if (source.quality) {
-                                    operations.push(`q${source.quality}`)
-                                }
-
-                                if (source.progressive) {
-                                    operations.push(`p${source.progressive ? 1 : 0}`)
-                                }
-
                                 if (formatIndex === this.formats.length -1 && sourceIndex === format.srcset.length - 1) {
-                                    fallbackSources = `${this.baseUrl}/${operations.join(ampersand)}/${this.src}`
+                                    fallbackSources = this.strategyInstance.formatPath(this.src, source, this.baseUrl)
                                 }
 
-                                return `${this.baseUrl}/${operations.join(ampersand)}/${this.src} ${source.rule}`
+                                return `${this.strategyInstance.formatPath(this.src, source, this.baseUrl, true)}`
                             }
                         )
                     }
@@ -135,7 +103,7 @@ export class InterventionRequestPicture {
                      * for non webp
                      * and only if preferWebp is true
                      */
-                    if (preferWebp && !this.isWebp) {
+                    if (this.strategyInstance.webp && !this.isWebp) {
                         sources.push(
                             <source
                                 type={ 'image/webp' }
@@ -172,6 +140,15 @@ export class InterventionRequestPicture {
                     return sources
                 }
             )
+        } else {
+            /**
+             * Original media
+             * In case no formats provided
+             */
+            sources.push(
+                <source srcSet={ `${this.strategyInstance.baseUrl}/${this.src}` } />,
+                <img src={ `${this.strategyInstance.baseUrl}/${this.src}` } alt={ this.alt } />
+            )
         }
 
         return (
@@ -181,6 +158,11 @@ export class InterventionRequestPicture {
         )
     }
 
+    /**
+     * Component render
+     * Component lifecycle method
+     * @return HTMLInterventionRequestPictureElement
+     */
     render(): HTMLInterventionRequestPictureElement {
         return (
             <Host>
