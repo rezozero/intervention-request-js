@@ -1,14 +1,17 @@
+import { InterventionRequestStrategies } from './strategies'
+
 export namespace  InterventionRequest {
     interface Configurations {
         strategy?: string
         baseUrl?: string
-        lazy?: boolean
+        forceIo?: boolean
+        loading: 'lazy' | 'eager' | 'auto'
         strategies?: InterventionRequestStrategies
-        defaultMediaOptions?: MediaFormat
+        mediaOptions?: MediaFormat
     }
 
     interface MediaFormat {
-        [index: string]: string | number
+        [index: string]: string | number | undefined
         fit?: string
         crop?: string
         align?: string
@@ -31,12 +34,12 @@ export namespace  InterventionRequest {
     type Formats = Array<Format>
 }
 
-declare global {
-    interface InterventionRequestConfigurations extends InterventionRequest.Configurations {}
-    interface InterventionRequestMediaFormat extends InterventionRequest.MediaFormat {}
-    interface InterventionRequestFormat extends InterventionRequest.Format {}
-    interface InterventionRequestFormats extends InterventionRequest.Formats {}
+export interface InterventionRequestConfigurations extends InterventionRequest.Configurations {}
+export interface InterventionRequestMediaFormat extends InterventionRequest.MediaFormat {}
+export interface InterventionRequestFormat extends InterventionRequest.Format {}
+export interface InterventionRequestFormats extends InterventionRequest.Formats {}
 
+declare global {
     interface Window {
         interventionRequestJS: InterventionRequestConfigurations
     }

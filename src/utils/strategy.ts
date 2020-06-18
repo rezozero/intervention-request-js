@@ -3,6 +3,9 @@
  * @description Build providers default strategy
  * @author ravorona
  */
+import { InterventionRequestOperations, InterventionRequestStrategy } from '../strategies'
+import { InterventionRequestMediaFormat } from '../intervention-request'
+
 export default class Strategy implements InterventionRequestStrategy {
     /**
      * Strategy defaults
@@ -59,10 +62,10 @@ export default class Strategy implements InterventionRequestStrategy {
              * Override default media options
              * If global configuration is set
              */
-            if (window.interventionRequestJS.defaultMediaOptions) {
+            if (window.interventionRequestJS.mediaOptions) {
                 this.defaultMediaOptions = {
                     ...this.defaultMediaOptions,
-                    ...window.interventionRequestJS.defaultMediaOptions
+                    ...window.interventionRequestJS.mediaOptions
                 }
             }
 

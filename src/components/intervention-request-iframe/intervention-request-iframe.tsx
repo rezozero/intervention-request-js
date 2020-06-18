@@ -1,11 +1,9 @@
-import { Component, Prop, Host, h } from '@stencil/core'
+import { Component, Prop, Host, h, Element } from '@stencil/core'
 
 /**
  * InterventionRequest Iframe
  * @description Iframe component
  * @author ravorona
- *
- * @todo fill attributes
  */
 @Component({
     tag: 'intervention-request-iframe',
@@ -13,19 +11,58 @@ import { Component, Prop, Host, h } from '@stencil/core'
 })
 export class InterventionRequestIframe {
     /**
-     * Image source
+     * Component element reference
      */
-    @Prop() src!: string
+    @Element()
+    el: HTMLElement;
 
     /**
-     * Image alt attribute
+     * Source
      */
-    @Prop() alt: string
+    @Prop()
+    src!: string
 
     /**
-     * Source list
+     * Alt attribute
      */
-    @Prop() formats?: InterventionRequestFormats
+    @Prop()
+    alt: string
+
+    /**
+     * Width attribute
+     */
+    @Prop()
+    width: number
+
+    /**
+     * Height attribute
+     */
+    @Prop()
+    height: number
+
+    /**
+     * Strategy
+     */
+    @Prop()
+    strategy: string
+
+    /**
+     * Base URL
+     */
+    @Prop()
+    baseUrl?: string
+
+    /**
+     * Loading type
+     * Native lazyloading. see https://caniuse.com/#feat=loading-lazy-attr
+     *
+     * auto: Default lazy-loading behavior of the browser, which is the same as not including the attribute.
+     * lazy: Defer loading of the resource until it reaches a calculated distance from the viewport.
+     * eager: Load the resource immediately, regardless of where it's located on the page.
+     * @default auto
+     */
+    @Prop()
+    loading: 'lazy' | 'eager' | 'auto'
 
     /**
      * Component render
@@ -35,8 +72,14 @@ export class InterventionRequestIframe {
     render(): HTMLInterventionRequestIframeElement {
         return (
             <Host>
-                <iframe src={ this.src } />
+                <iframe
+                    width={ this.width }
+                    height={ this.height }
+                    src={ this.src }
+                    title={ this.alt }
+                    frameborder="0"
+                    loading={ this.loading } />
             </Host>
-        );
+        )
     }
 }

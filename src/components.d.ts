@@ -5,6 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { InterventionRequestFormats } from "./intervention-request";
 export namespace Components {
     interface InterventionRequest {
         /**
@@ -20,17 +21,26 @@ export namespace Components {
          */
         "classes"?: string;
         /**
-          * Embed mode - Use iframe if true
+          * Embed mode use iframe if true
          */
-        "embed": boolean;
+        "embed"?: boolean;
+        /**
+          * Force intersection observer for lazy load
+         */
+        "forceIo"?: boolean;
         /**
           * Source list
          */
         "formats"?: string;
         /**
-          * Lazyload
+          * Height attribute
          */
-        "lazy"?: boolean;
+        "height": number;
+        /**
+          * Loading type Native lazyloading. see https://caniuse.com/#feat=loading-lazy-attr see https://web.dev/native-lazy-loading/  auto: Default lazy-loading behavior of the browser, which is the same as not including the attribute. lazy: Defer loading of the resource until it reaches a calculated distance from the viewport. eager: Load the resource immediately, regardless of where it's located on the page.
+          * @default auto
+         */
+        "loading"?: 'lazy' | 'eager' | 'auto';
         /**
           * Source
          */
@@ -39,49 +49,79 @@ export namespace Components {
           * Strategy
          */
         "strategy"?: string;
+        /**
+          * Width attribute
+         */
+        "width": number;
     }
     interface InterventionRequestIframe {
         /**
-          * Image alt attribute
-         */
-        "alt": string;
-        /**
-          * Source list
-         */
-        "formats"?: InterventionRequestFormats;
-        /**
-          * Image source
-         */
-        "src": string;
-    }
-    interface InterventionRequestPicture {
-        /**
-          * Image alt attribute
+          * Alt attribute
          */
         "alt": string;
         /**
           * Base URL
-          * @default assets
          */
         "baseUrl"?: string;
+        /**
+          * Height attribute
+         */
+        "height": number;
+        /**
+          * Loading type Native lazyloading. see https://caniuse.com/#feat=loading-lazy-attr  auto: Default lazy-loading behavior of the browser, which is the same as not including the attribute. lazy: Defer loading of the resource until it reaches a calculated distance from the viewport. eager: Load the resource immediately, regardless of where it's located on the page.
+          * @default auto
+         */
+        "loading": 'lazy' | 'eager' | 'auto';
+        /**
+          * Source
+         */
+        "src": string;
+        /**
+          * Strategy
+         */
+        "strategy": string;
+        /**
+          * Width attribute
+         */
+        "width": number;
+    }
+    interface InterventionRequestPicture {
+        /**
+          * Alt attribute
+         */
+        "alt": string;
+        /**
+          * Base URL
+         */
+        "baseUrl": string;
+        /**
+          * Force intersection observer for lazy load
+         */
+        "forceIo"?: boolean;
         /**
           * Source list
          */
         "formats"?: InterventionRequestFormats;
         /**
-          * Lazy load
-          * @default true
+          * Height attribute
          */
-        "lazy"?: boolean;
+        "height"?: number;
         /**
-          * Image source
+          * Loading type
+         */
+        "loading": 'lazy' | 'eager' | 'auto';
+        /**
+          * Source
          */
         "src": string;
         /**
           * Strategy
-          * @default default
          */
         "strategy": string;
+        /**
+          * Width attribute
+         */
+        "width"?: number;
     }
 }
 declare global {
@@ -124,17 +164,26 @@ declare namespace LocalJSX {
          */
         "classes"?: string;
         /**
-          * Embed mode - Use iframe if true
+          * Embed mode use iframe if true
          */
         "embed"?: boolean;
+        /**
+          * Force intersection observer for lazy load
+         */
+        "forceIo"?: boolean;
         /**
           * Source list
          */
         "formats"?: string;
         /**
-          * Lazyload
+          * Height attribute
          */
-        "lazy"?: boolean;
+        "height"?: number;
+        /**
+          * Loading type Native lazyloading. see https://caniuse.com/#feat=loading-lazy-attr see https://web.dev/native-lazy-loading/  auto: Default lazy-loading behavior of the browser, which is the same as not including the attribute. lazy: Defer loading of the resource until it reaches a calculated distance from the viewport. eager: Load the resource immediately, regardless of where it's located on the page.
+          * @default auto
+         */
+        "loading"?: 'lazy' | 'eager' | 'auto';
         /**
           * Source
          */
@@ -143,49 +192,79 @@ declare namespace LocalJSX {
           * Strategy
          */
         "strategy"?: string;
+        /**
+          * Width attribute
+         */
+        "width"?: number;
     }
     interface InterventionRequestIframe {
         /**
-          * Image alt attribute
-         */
-        "alt"?: string;
-        /**
-          * Source list
-         */
-        "formats"?: InterventionRequestFormats;
-        /**
-          * Image source
-         */
-        "src": string;
-    }
-    interface InterventionRequestPicture {
-        /**
-          * Image alt attribute
+          * Alt attribute
          */
         "alt"?: string;
         /**
           * Base URL
-          * @default assets
          */
         "baseUrl"?: string;
+        /**
+          * Height attribute
+         */
+        "height"?: number;
+        /**
+          * Loading type Native lazyloading. see https://caniuse.com/#feat=loading-lazy-attr  auto: Default lazy-loading behavior of the browser, which is the same as not including the attribute. lazy: Defer loading of the resource until it reaches a calculated distance from the viewport. eager: Load the resource immediately, regardless of where it's located on the page.
+          * @default auto
+         */
+        "loading"?: 'lazy' | 'eager' | 'auto';
+        /**
+          * Source
+         */
+        "src": string;
+        /**
+          * Strategy
+         */
+        "strategy"?: string;
+        /**
+          * Width attribute
+         */
+        "width"?: number;
+    }
+    interface InterventionRequestPicture {
+        /**
+          * Alt attribute
+         */
+        "alt"?: string;
+        /**
+          * Base URL
+         */
+        "baseUrl"?: string;
+        /**
+          * Force intersection observer for lazy load
+         */
+        "forceIo"?: boolean;
         /**
           * Source list
          */
         "formats"?: InterventionRequestFormats;
         /**
-          * Lazy load
-          * @default true
+          * Height attribute
          */
-        "lazy"?: boolean;
+        "height"?: number;
         /**
-          * Image source
+          * Loading type
+         */
+        "loading"?: 'lazy' | 'eager' | 'auto';
+        /**
+          * Source
          */
         "src": string;
         /**
           * Strategy
-          * @default default
          */
         "strategy"?: string;
+        /**
+          * Width attribute
+         */
+        "width"?: number;
     }
     interface IntrinsicElements {
         "intervention-request": InterventionRequest;

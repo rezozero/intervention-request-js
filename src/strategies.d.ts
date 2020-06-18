@@ -1,6 +1,6 @@
-import Strategy from '~/utils/strategy'
+import Strategy from './utils/strategy'
 
-export namespace InterventionRequest {
+export namespace InterventionRequestStrategies {
     interface Base {
         name: string
         baseUrl: string
@@ -33,8 +33,6 @@ export namespace InterventionRequest {
     }
 }
 
-declare global {
-    interface InterventionRequestOperations extends InterventionRequest.Operations {}
-    interface InterventionRequestStrategy extends InterventionRequest.Base {}
-    interface InterventionRequestStrategies extends InterventionRequest.Strategies {}
-}
+export interface InterventionRequestOperations extends InterventionRequestStrategies.Operations {}
+export interface InterventionRequestStrategy extends InterventionRequestStrategies.Base {}
+export interface InterventionRequestStrategies extends InterventionRequestStrategies.Strategies {}

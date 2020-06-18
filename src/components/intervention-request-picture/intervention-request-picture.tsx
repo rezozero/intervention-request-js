@@ -1,64 +1,162 @@
-import { Component, Prop, Host, h } from '@stencil/core'
-import strategies from '~/strategies/index'
-import Strategy from '~/utils/strategy'
-import { isWebp } from '~/utils/utils'
+import { Component, Prop, Host, h, Element, State, Listen } from '@stencil/core'
+import strategies from '../../strategies/index'
+import Strategy from '../../utils/strategy'
+import { isWebp, log } from '../../utils/utils'
+import { InterventionRequestFormat, InterventionRequestFormats, InterventionRequestMediaFormat } from '../../intervention-request'
 
 /**
  * InterventionRequest Picture
  * @description Picture component
  * @author ravorona
- *
- * @todo lazyloading
  */
 @Component({
     tag: 'intervention-request-picture',
     styleUrl: 'intervention-request-picture.css',
-    shadow: true,
+    shadow: false,
 })
 export class InterventionRequestPicture {
     /**
-     * Image source
+     * Component element reference
      */
-    @Prop() src!: string
+    @Element()
+    el: HTMLElement
 
     /**
-     * Image alt attribute
+     * Source
      */
-    @Prop() alt: string
+    @Prop()
+    src!: string
+
+    /**
+     * Alt attribute
+     */
+    @Prop()
+    alt: string
+
+    /**
+     * Width attribute
+     */
+    @Prop()
+    width?: number
+
+    /**
+     * Height attribute
+     */
+    @Prop()
+    height?: number
+
+    /**
+     * Strategy
+     */
+    @Prop()
+    strategy: string
+
+    /**
+     * Base URL
+     */
+    @Prop()
+    baseUrl: string
 
     /**
      * Source list
      */
-    @Prop() formats?: InterventionRequestFormats
+    @Prop()
+    formats?: InterventionRequestFormats
 
     /**
-     * Strategy
-     * @default default
+     * Force intersection observer
+     * for lazy load
      */
-    @Prop() strategy: string = window.interventionRequestJS.strategy || 'default'
+    @Prop()
+    forceIo?: boolean
 
     /**
-     * Base URL
-     * @default assets
+     * Loading type
      */
-    @Prop() baseUrl?: string
+    @Prop()
+    loading: 'lazy' | 'eager' | 'auto'
 
-
-    /**
-     * Lazy load
-     * @default true
-     */
-    @Prop() lazy?: boolean = window.interventionRequestJS.lazy
+    @State()
+    private loaded: boolean = false
 
     private strategyInstance: Strategy = strategies[this.strategy] as Strategy
     private isWebp: boolean = isWebp(this.src)
+    private nativeLoading: boolean = ('loading' in HTMLImageElement.prototype) && !this.forceIo
+    private observer?: IntersectionObserver
 
     /**
      * Component wiill load
      * Component lifecycle method
      * @return void
      */
-    componentWillLoad(): void {}
+    componentWillLoad(): void {
+        if (!this.strategyInstance) {
+            log('strategy error')
+        }
+    }
+
+    /**
+     * Component did load
+     * Component lifecycle method
+     * @return void
+     */
+    componentDidLoad(): void {
+        if (this.nativeLoading || this.loading !== 'lazy') {
+            this.loadMedia()
+        } else {
+            this.initObserver()
+        }
+    }
+
+    /**
+     * Init intersection observer
+     */
+    private initObserver (): void {
+        this.observer = new IntersectionObserver((entries: Array<IntersectionObserverEntry>): void => this.onIntersect(entries))
+        this.observer.observe(this.el)
+    }
+
+    /**
+     * Intersection observer callback
+     * @param entries
+     */
+    private onIntersect (entries: Array<IntersectionObserverEntry>): void {
+        entries.forEach(
+            (entry: IntersectionObserverEntry): void => {
+                if (entry.isIntersecting) {
+                    this.observer.disconnect()
+                    this.loadMedia()
+                }
+            }
+        )
+    }
+
+    /**
+     * Load media
+     * Toggle attribures
+     */
+    private loadMedia (): void {
+        const elements = this.el.querySelectorAll('source, img')
+
+        elements.forEach(
+            (element: HTMLSourceElement|HTMLImageElement): void => {
+                if (element.dataset.src) {
+                    element.setAttribute('src', element.dataset.src)
+                }
+
+                if (element.dataset.srcset) {
+                    element.setAttribute('srcset', element.dataset.srcset)
+                }
+            }
+        )
+    }
+
+    /**
+     * Media ready
+     */
+    public onReady (): void {
+        this.loaded = true
+    }
 
     /**
      * Build picture tag
@@ -109,7 +207,7 @@ export class InterventionRequestPicture {
                                 type={ 'image/webp' }
                                 media={ format.media }
                                 sizes={ format.sizes }
-                                srcSet={ srcset.join(',').replace(new RegExp(this.src, 'g'), `${this.src}.webp`) } />
+                                data-srcset={ srcset.join(',').replace(new RegExp(this.src, 'g'), `${this.src}.webp`) } />
                         )
                     }
 
@@ -121,7 +219,7 @@ export class InterventionRequestPicture {
                         <source
                             media={ format.media }
                             sizes={ format.sizes }
-                            srcSet={ srcset.join(',') } />
+                            data-srcset={ srcset.join(',') } />
                     )
 
                     /**
@@ -130,10 +228,14 @@ export class InterventionRequestPicture {
                     if (fallbackSources) {
                         sources.push(
                             <img
-                                src={ fallbackSources }
+                                width={ this.width }
+                                height={ this.height }
                                 sizes={ format.sizes }
-                                srcSet={ srcset.join(',') }
-                                alt={ this.alt } />
+                                alt={ this.alt || this.src }
+                                loading={ this.loading }
+                                data-src={ fallbackSources }
+                                data-srcSet={ srcset.join(',') }
+                                onLoad={ () => this.onReady() } />
                         )
                     }
 
@@ -146,8 +248,15 @@ export class InterventionRequestPicture {
              * In case no formats provided
              */
             sources.push(
-                <source srcSet={ `${this.strategyInstance.baseUrl}/${this.src}` } />,
-                <img src={ `${this.strategyInstance.baseUrl}/${this.src}` } alt={ this.alt } />
+                <source
+                    data-srcset={ `${this.strategyInstance.baseUrl}/${this.src}` } />,
+                <img
+                    width={ this.width }
+                    height={ this.height }
+                    alt={ this.alt || this.src }
+                    loading={ this.loading }
+                    data-src={ `${this.strategyInstance.baseUrl}/${this.src}` }
+                    onLoad={ this.onReady } />
             )
         }
 
@@ -158,6 +267,11 @@ export class InterventionRequestPicture {
         )
     }
 
+    @Listen('click', { capture: true })
+    handleClick() {
+        this.onReady()
+    }
+
     /**
      * Component render
      * Component lifecycle method
@@ -165,9 +279,9 @@ export class InterventionRequestPicture {
      */
     render(): HTMLInterventionRequestPictureElement {
         return (
-            <Host>
-                { this.buildPicture() }
+            <Host class={{ loaded: this.loaded }}>
+                { this.strategyInstance && this.buildPicture() }
             </Host>
-        );
+        )
     }
 }

@@ -3,3 +3,39 @@
 # Intervention Request JS
 
 JS client for building HTML picture tags using Intervention Request images
+
+## Installation
+
+## Framework integration
+### Link package
+```sh
+# Clone the package repo
+cd && git clone git@github.com:rezozero/intervention-request-js.git
+
+# Change your working directory into the package directory
+cd ~/intervention-request-js
+
+# Build the package
+yarn build
+
+# Create the package folder symlink
+yarn link
+
+# Change to an other packe or project directory
+cd ~/other-repository
+
+# Link our package
+yarn link @rezozero/intervention-request
+```
+
+## Usage
+```html
+<intervention-request
+    src="image.jpg"
+    alt="Sample"
+    width="1280"
+    height="768"
+    formats='[{"media":"screen","sizes":"100vw","srcset":[{"fit":"640x384", "rule": "640w"}, {"fit":"1280x768", "rule": "1280w"}]}]'>
+</intervention-request>
+```
+## Attributes

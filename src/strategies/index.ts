@@ -1,6 +1,7 @@
-import defaultStrategy from '~/strategies/default'
-import cloudinaryStrategy from '~/strategies/cloudinary'
-import Strategy from '~/utils/strategy'
+import defaultStrategy from '../strategies/default'
+import cloudinaryStrategy from '../strategies/cloudinary'
+import Strategy from '../utils/strategy'
+import { InterventionRequestStrategies } from '../strategies'
 
 /**
  * Strategy list
