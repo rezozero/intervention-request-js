@@ -11,21 +11,22 @@ export namespace InterventionRequestStrategies {
     }
 
     interface Operations {
-        [index: string]: string
-        align: string
-        fit: string
-        flip: string
-        crop: string
-        width: string
-        height: string
-        background: string
-        greyscale: string
-        blur: string
-        quality: string
-        progressive: string
-        interlace: string
-        sharpen: string
-        contrast: string
+        [index: string]: string | number | undefined
+        align?: string
+        fit?: string
+        flip?: string
+        crop?: string
+        width?: string | number
+        height?: string | number
+        background?: string
+        greyscale?: string | number
+        blur?: string | number
+        quality?: string | number
+        progressive?: string | number
+        interlace?: string | number
+        sharpen?: string | number
+        contrast?: string | number
+        rule?: string
     }
 
     interface Strategies {

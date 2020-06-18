@@ -4,7 +4,6 @@
  * @author ravorona
  */
 import { InterventionRequestOperations, InterventionRequestStrategy } from '../strategies'
-import { InterventionRequestMediaFormat } from '../intervention-request'
 
 export default class Strategy implements InterventionRequestStrategy {
     /**
@@ -34,9 +33,9 @@ export default class Strategy implements InterventionRequestStrategy {
 
     /**
      * Default media options
-     * @return InterventionRequestMediaFormat
+     * @return InterventionRequestOperations
      */
-    private readonly defaultMediaOptions: InterventionRequestMediaFormat = {
+    private readonly defaultMediaOptions: InterventionRequestOperations = {
         rule: '100vw'
     }
 
@@ -90,7 +89,7 @@ export default class Strategy implements InterventionRequestStrategy {
      * @param format - image format
      * @return string
      */
-    private computedOperations (format: InterventionRequestMediaFormat): string {
+    private computedOperations (format: InterventionRequestOperations): string {
         let computedOperations = []
 
         /**
@@ -121,7 +120,7 @@ export default class Strategy implements InterventionRequestStrategy {
      * @param rule - media rule
      * @return string
      */
-    public formatPath (source: string, format: InterventionRequestMediaFormat, baseUrl: string | undefined = undefined, rule: boolean | string = false): string {
+    public formatPath (source: string, format: InterventionRequestOperations, baseUrl: string | undefined = undefined, rule: boolean | string = false): string {
         let path = `${baseUrl || this.baseUrl}/${this.computedOperations(format)}/${source}`
 
         if (rule) {

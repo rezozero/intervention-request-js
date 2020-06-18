@@ -2,7 +2,8 @@ import { Component, Prop, Host, h, Element, State, Listen } from '@stencil/core'
 import strategies from '../../strategies/index'
 import Strategy from '../../utils/strategy'
 import { isWebp, log } from '../../utils/utils'
-import { InterventionRequestFormat, InterventionRequestFormats, InterventionRequestMediaFormat } from '../../intervention-request'
+import { InterventionRequestFormat, InterventionRequestFormats } from '../../intervention-request'
+import { InterventionRequestOperations } from '../../strategies'
 
 /**
  * InterventionRequest Picture
@@ -164,6 +165,7 @@ export class InterventionRequestPicture {
      */
     private buildPicture(): HTMLPictureElement {
         let sources: Array<any> = []
+        let fallbackSources!: string
 
         if (this.formats && this.formats.length) {
             /**
@@ -174,7 +176,6 @@ export class InterventionRequestPicture {
                 (format: InterventionRequestFormat, formatIndex: number): Array<HTMLSourceElement> => {
                     let srcset: Array<string> = []
                     let sources: Array<HTMLSourceElement> = []
-                    let fallbackSources!: string
 
                     /**
                      * Generate srcset
@@ -186,7 +187,7 @@ export class InterventionRequestPicture {
                          * Define all srcset for responsive behavior
                          */
                         srcset = format.srcset.map(
-                            (source: InterventionRequestMediaFormat, sourceIndex: number): string => {
+                            (source: InterventionRequestOperations, sourceIndex: number): string => {
                                 if (formatIndex === this.formats.length -1 && sourceIndex === format.srcset.length - 1) {
                                     fallbackSources = this.strategyInstance.formatPath(this.src, source, this.baseUrl)
                                 }
@@ -243,19 +244,45 @@ export class InterventionRequestPicture {
                 }
             )
         } else {
+            const baseUrl: string = this.baseUrl || this.strategyInstance.baseUrl
+            const format: InterventionRequestOperations = {
+                width: this.width || window.innerWidth,
+                height: this.height || window.innerWidth * 9 / 16
+            }
+
+            fallbackSources = this.strategyInstance.formatPath(this.src, format, baseUrl)
+
             /**
              * Original media
              * In case no formats provided
              */
+
+            /**
+             * Generate webp source
+             * for non webp
+             * and only if preferWebp is true
+             */
+            if (this.strategyInstance.webp && !this.isWebp) {
+                sources.push(
+                    <source
+                        type={ 'image/webp' }
+                        data-srcset={ `${ fallbackSources }.webp` } />
+                )
+            }
+
+            /**
+             * Generate common source
+             * Regardless of media type
+             */
             sources.push(
                 <source
-                    data-srcset={ `${this.strategyInstance.baseUrl}/${this.src}` } />,
+                    data-srcset={ fallbackSources } />,
                 <img
                     width={ this.width }
                     height={ this.height }
                     alt={ this.alt || this.src }
                     loading={ this.loading }
-                    data-src={ `${this.strategyInstance.baseUrl}/${this.src}` }
+                    data-src={ fallbackSources }
                     onLoad={ this.onReady } />
             )
         }

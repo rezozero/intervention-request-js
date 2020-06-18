@@ -106,6 +106,9 @@ export class InterventionRequest {
      * @return void
      */
     componentWillLoad(): void {
+        console.log('baseUrl: %s', this.baseUrl)
+        console.log('source: %s', this.src)
+
         if (!this.src) {
             log('src is required')
         }
