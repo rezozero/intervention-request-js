@@ -1,9 +1,9 @@
-import { Component, Prop, Host, h, Element, State, Listen } from '@stencil/core'
+import { Component, Prop, Host, h, Element, State } from '@stencil/core'
 import strategies from '../../strategies/index'
 import Strategy from '../../utils/strategy'
-import { isWebp, log } from '../../utils/utils'
-import { InterventionRequestFormat, InterventionRequestFormats } from '../../intervention-request'
-import { InterventionRequestOperations } from '../../strategies'
+import { isWebp } from '../../utils/utils'
+import { InterventionRequestFormat, InterventionRequestMedia } from '../../intervention-request'
+import { InterventionRequestStrategyFormat } from '../../strategies'
 
 /**
  * InterventionRequest Picture
@@ -16,6 +16,14 @@ import { InterventionRequestOperations } from '../../strategies'
     shadow: false,
 })
 export class InterventionRequestPicture {
+    /**
+     * Own properties
+     */
+    private strategyInstance?: Strategy
+    private isWebp: boolean
+    private nativeLoading: boolean
+    private observer: IntersectionObserver
+
     /**
      * Component element reference
      */
@@ -62,7 +70,13 @@ export class InterventionRequestPicture {
      * Source list
      */
     @Prop()
-    formats?: InterventionRequestFormats
+    media?: InterventionRequestMedia
+
+    /**
+     * Mime type
+     */
+    @Prop()
+    mimeType?: string
 
     /**
      * Force intersection observer
@@ -80,19 +94,18 @@ export class InterventionRequestPicture {
     @State()
     private loaded: boolean = false
 
-    private strategyInstance: Strategy = strategies[this.strategy] as Strategy
-    private isWebp: boolean = isWebp(this.src)
-    private nativeLoading: boolean = ('loading' in HTMLImageElement.prototype) && !this.forceIo
-    private observer?: IntersectionObserver
-
     /**
      * Component wiill load
      * Component lifecycle method
      * @return void
      */
     componentWillLoad(): void {
-        if (!this.strategyInstance) {
-            log('strategy error')
+        this.strategyInstance = strategies[this.strategy]
+        this.isWebp = isWebp(this.src)
+        this.nativeLoading = ('loading' in HTMLImageElement.prototype) && !this.forceIo
+
+        if (!this.strategyInstance && window.interventionRequestJS && window.interventionRequestJS.debug) {
+            console.error('strategy error', `${this.strategy} strategy is missing`)
         }
     }
 
@@ -160,22 +173,37 @@ export class InterventionRequestPicture {
     }
 
     /**
+     * On error
+     */
+    public onError (): void {}
+
+    /**
      * Build picture tag
      * @return HTMLPictureElement
      */
     private buildPicture(): HTMLPictureElement {
-        let sources: Array<any> = []
+        let mediaElements: Array<any> = []
         let fallbackSources!: string
 
-        if (this.formats && this.formats.length) {
+        if (this.media && this.media.length) {
             /**
              * Loop thru formats
              * Define all <source>
              */
-            sources = this.formats.map(
-                (format: InterventionRequestFormat, formatIndex: number): Array<HTMLSourceElement> => {
+            mediaElements = this.media.map(
+                (format: InterventionRequestFormat, formatIndex: number): Array<HTMLSourceElement|HTMLImageElement> => {
                     let srcset: Array<string> = []
-                    let sources: Array<HTMLSourceElement> = []
+                    let sources: Array<HTMLSourceElement|HTMLImageElement> = []
+
+                    /**
+                     * Ensure that format.srcset
+                     * contains all required properties
+                     */
+                    format.srcset = format.srcset.filter(
+                        (source: InterventionRequestStrategyFormat): boolean => {
+                            return !!(source.format)
+                        }
+                    )
 
                     /**
                      * Generate srcset
@@ -187,8 +215,8 @@ export class InterventionRequestPicture {
                          * Define all srcset for responsive behavior
                          */
                         srcset = format.srcset.map(
-                            (source: InterventionRequestOperations, sourceIndex: number): string => {
-                                if (formatIndex === this.formats.length -1 && sourceIndex === format.srcset.length - 1) {
+                            (source: InterventionRequestStrategyFormat, sourceIndex: number): string => {
+                                if (formatIndex === this.media.length -1 && sourceIndex === format.srcset.length - 1) {
                                     fallbackSources = this.strategyInstance.formatPath(this.src, source, this.baseUrl)
                                 }
 
@@ -197,60 +225,71 @@ export class InterventionRequestPicture {
                         )
                     }
 
-                    /**
-                     * Generate webp source
-                     * for non webp
-                     * and only if preferWebp is true
-                     */
-                    if (this.strategyInstance.webp && !this.isWebp) {
+                    if (srcset.length) {
+                        /**
+                         * Generate webp source
+                         * for non webp
+                         * and only if preferWebp is true
+                         */
+                        if (this.strategyInstance.webp && !this.isWebp) {
+                            sources.push(
+                                <source
+                                    type={ 'image/webp' }
+                                    media={ format.media }
+                                    sizes={ format.rule }
+                                    data-srcset={ srcset.join(', ').replace(new RegExp(this.src, 'g'), `${this.src}.webp`) } />
+                            )
+                        }
+
+                        /**
+                         * Generate common source
+                         * Regardless of media type
+                         */
                         sources.push(
                             <source
-                                type={ 'image/webp' }
+                                type={ this.mimeType }
                                 media={ format.media }
-                                sizes={ format.sizes }
-                                data-srcset={ srcset.join(',').replace(new RegExp(this.src, 'g'), `${this.src}.webp`) } />
+                                sizes={ format.rule }
+                                data-srcset={ srcset.join(', ') } />
                         )
-                    }
 
-                    /**
-                     * Generate common source
-                     * Regardless of media type
-                     */
-                    sources.push(
-                        <source
-                            media={ format.media }
-                            sizes={ format.sizes }
-                            data-srcset={ srcset.join(',') } />
-                    )
-
-                    /**
-                     * Generate fallback
-                     */
-                    if (fallbackSources) {
-                        sources.push(
-                            <img
-                                width={ this.width }
-                                height={ this.height }
-                                sizes={ format.sizes }
-                                alt={ this.alt || this.src }
-                                loading={ this.loading }
-                                data-src={ fallbackSources }
-                                data-srcSet={ srcset.join(',') }
-                                onLoad={ () => this.onReady() } />
-                        )
+                        /**
+                         * Generate fallback
+                         */
+                        if (fallbackSources) {
+                            sources.push(
+                                <img
+                                    width={ this.width }
+                                    height={ this.height }
+                                    sizes={ format.rule }
+                                    alt={ this.alt || this.src }
+                                    loading={ this.loading }
+                                    data-src={ fallbackSources }
+                                    data-srcSet={ srcset.join(', ') }
+                                    onLoad={ () => this.onReady() } />
+                            )
+                        }
                     }
 
                     return sources
                 }
             )
         } else {
-            const baseUrl: string = this.baseUrl || this.strategyInstance.baseUrl
-            const format: InterventionRequestOperations = {
-                width: this.width || window.innerWidth,
-                height: this.height || window.innerWidth * 9 / 16
+            const operations: InterventionRequestStrategyFormat = {
+                format: {
+                    width: this.width || window.innerWidth,
+                    height: this.height || Math.floor(window.innerWidth * 3 / 4)
+                }
             }
 
-            fallbackSources = this.strategyInstance.formatPath(this.src, format, baseUrl)
+            if (window.interventionRequestJS) {
+                operations.format = {
+                    ...window.interventionRequestJS.mediaOptions,
+                    ...operations.format
+                }
+            }
+
+            fallbackSources = this.strategyInstance.formatPath(this.src, operations, this.baseUrl)
 
             /**
              * Original media
@@ -263,7 +302,7 @@ export class InterventionRequestPicture {
              * and only if preferWebp is true
              */
             if (this.strategyInstance.webp && !this.isWebp) {
-                sources.push(
+                mediaElements.push(
                     <source
                         type={ 'image/webp' }
                         data-srcset={ `${ fallbackSources }.webp` } />
@@ -274,8 +313,9 @@ export class InterventionRequestPicture {
              * Generate common source
              * Regardless of media type
              */
-            sources.push(
+            mediaElements.push(
                 <source
+                    type={ this.mimeType }
                     data-srcset={ fallbackSources } />,
                 <img
                     width={ this.width }
@@ -283,20 +323,16 @@ export class InterventionRequestPicture {
                     alt={ this.alt || this.src }
                     loading={ this.loading }
                     data-src={ fallbackSources }
-                    onLoad={ this.onReady } />
+                    onLoad={ this.onReady }
+                    onError={ this.onError }/>
             )
         }
 
         return (
             <picture>
-                { sources }
+                { mediaElements }
             </picture>
         )
-    }
-
-    @Listen('click', { capture: true })
-    handleClick() {
-        this.onReady()
     }
 
     /**

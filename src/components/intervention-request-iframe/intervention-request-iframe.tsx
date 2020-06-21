@@ -41,12 +41,6 @@ export class InterventionRequestIframe {
     height: number
 
     /**
-     * Strategy
-     */
-    @Prop()
-    strategy: string
-
-    /**
      * Base URL
      */
     @Prop()

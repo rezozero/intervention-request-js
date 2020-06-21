@@ -3,7 +3,7 @@
  * @description Build providers default strategy
  * @author ravorona
  */
-import { InterventionRequestOperations, InterventionRequestStrategy } from '../strategies'
+import { InterventionRequestStrategyOperations, InterventionRequestStrategy, InterventionRequestStrategyFormat } from '../strategies'
 
 export default class Strategy implements InterventionRequestStrategy {
     /**
@@ -14,28 +14,30 @@ export default class Strategy implements InterventionRequestStrategy {
     public ampersand: string = '-'
     public separator: string = ''
     public webp: boolean = false
-    public operations: InterventionRequestOperations = {
-        align: 'a',
-        fit: 'f',
-        flip: 'm',
-        crop: 'c',
-        width: 'w',
-        height: 'h',
-        background: 'b',
-        greyscale: 'g',
-        blur: 'l',
-        quality: 'q',
-        progressive: 'p',
-        interlace: 'i',
-        sharpen: 's',
-        contrast: 'k'
+    public operations: InterventionRequestStrategyFormat = {
+        format: {
+            align: 'a',
+            fit: 'f',
+            flip: 'm',
+            crop: 'c',
+            width: 'w',
+            height: 'h',
+            background: 'b',
+            greyscale: 'g',
+            blur: 'l',
+            quality: 'q',
+            progressive: 'p',
+            interlace: 'i',
+            sharpen: 's',
+            contrast: 'k'
+        }
     }
 
     /**
      * Default media options
      * @return InterventionRequestOperations
      */
-    private readonly defaultMediaOptions: InterventionRequestOperations = {
+    private readonly defaultMediaOptions: InterventionRequestStrategyFormat = {
         rule: '100vw'
     }
 
@@ -89,23 +91,23 @@ export default class Strategy implements InterventionRequestStrategy {
      * @param format - image format
      * @return string
      */
-    private computedOperations (format: InterventionRequestOperations): string {
+    private computedOperations (format: InterventionRequestStrategyOperations): string {
         let computedOperations = []
 
         /**
          * Applying default media options
          */
-        format = {
-            ...this.defaultMediaOptions,
+        let computedFormat = {
+            ...this.defaultMediaOptions.format,
             ...format
         }
 
         /**
          * Loop thru operations
          */
-        for (let operation in format) {
-            if (format.hasOwnProperty(operation) && this.operations[operation]) {
-                computedOperations.push(`${this.operations[operation]}${this.separator}${format[operation]}`)
+        for (let operation in computedFormat) {
+            if (computedFormat.hasOwnProperty(operation) && this.operations.format[operation]) {
+                computedOperations.push(`${this.operations.format[operation]}${this.separator}${computedFormat[operation]}`)
             }
         }
 
@@ -115,16 +117,16 @@ export default class Strategy implements InterventionRequestStrategy {
     /**
      * Format path
      * @param source - filename
-     * @param format - image format
+     * @param operations - image format
      * @param baseUrl - strategy baseUrl override
      * @param rule - media rule
      * @return string
      */
-    public formatPath (source: string, format: InterventionRequestOperations, baseUrl: string | undefined = undefined, rule: boolean | string = false): string {
-        let path = `${baseUrl || this.baseUrl}/${this.computedOperations(format)}/${source}`
+    public formatPath (source: string, operations: InterventionRequestStrategyFormat, baseUrl: string | undefined = undefined, rule: boolean = false): string {
+        let path = `${baseUrl || this.baseUrl}/${this.computedOperations(operations.format)}/${source}`
 
         if (rule) {
-            path += ` ${format.rule}`
+            path += ` ${operations.rule}`
         }
 
         return path

@@ -7,7 +7,7 @@ export namespace InterventionRequestStrategies {
         ampersand?: string
         separator?: string
         webp?: boolean
-        operations?: Operations
+        operations?: Format
     }
 
     interface Operations {
@@ -26,6 +26,10 @@ export namespace InterventionRequestStrategies {
         interlace?: string | number
         sharpen?: string | number
         contrast?: string | number
+    }
+
+    interface Format {
+        format?: Operations
         rule?: string
     }
 
@@ -34,6 +38,7 @@ export namespace InterventionRequestStrategies {
     }
 }
 
-export interface InterventionRequestOperations extends InterventionRequestStrategies.Operations {}
+export interface InterventionRequestStrategyOperations extends InterventionRequestStrategies.Operations {}
+export interface InterventionRequestStrategyFormat extends InterventionRequestStrategies.Format {}
 export interface InterventionRequestStrategy extends InterventionRequestStrategies.Base {}
 export interface InterventionRequestStrategies extends InterventionRequestStrategies.Strategies {}

@@ -1,6 +1,7 @@
 import { Element, Component, Prop, Host, h } from '@stencil/core'
-import { log } from '../../utils/utils'
-import { InterventionRequestFormats } from '../../intervention-request'
+import { InterventionRequestFormat, InterventionRequestMedia } from '../../intervention-request'
+import { InterventionRequestStrategyFormat } from '../../strategies'
+import { extractFileExtension } from '../../utils/utils'
 
 /**
  * InterventionRequest
@@ -13,6 +14,13 @@ import { InterventionRequestFormats } from '../../intervention-request'
     shadow: true,
 })
 export class InterventionRequest {
+    /**
+     * Own properties
+     */
+    private mediaObject: InterventionRequestMedia
+    private component: string
+    private classnames: string
+
     /**
      * Component element reference
      */
@@ -44,12 +52,6 @@ export class InterventionRequest {
     height: number
 
     /**
-     * Component additionnal classnames
-     */
-    @Prop()
-    classes?: string
-
-    /**
      * Base URL
      */
     @Prop()
@@ -59,7 +61,13 @@ export class InterventionRequest {
      * Source list
      */
     @Prop()
-    formats?: string
+    media?: string
+
+    /**
+     * Mime type
+     */
+    @Prop()
+    mimeType?: string
 
     /**
      * Embed mode
@@ -95,23 +103,90 @@ export class InterventionRequest {
     @Prop()
     loading?: 'lazy' | 'eager' | 'auto'
 
-
-    private formatsObject?: InterventionRequestFormats
-    private component: string = this.embed ? 'intervention-request-iframe' : 'intervention-request-picture'
-    private classnames: string = this.classes?.split(',').join(' ')
-
     /**
      * Component wiill load
      * Component lifecycle method
      * @return void
      */
     componentWillLoad(): void {
-        console.log('baseUrl: %s', this.baseUrl)
-        console.log('source: %s', this.src)
+        if (window.interventionRequestJS && window.interventionRequestJS.debug) {
+            console.groupCollapsed('%cIntervention Request', 'font-size: 10px; font-weight: normal; background: #673ab7; color: #fff; padding: 2px 4px; border-radius: 3px')
 
-        if (!this.src) {
-            log('src is required')
+            if (this.src) {
+                console.info('source: %s', this.src)
+            } else {
+                console.error('src attribute is required')
+            }
+
+            console.info('strategy: %s', this.strategy || 'default')
+
+            if (this.media) {
+                const media = JSON.parse(this.media)
+
+                console.log('media', media)
+
+                if (media) {
+                    media.forEach(
+                        (media: InterventionRequestFormat): void => {
+                            media.srcset.forEach(
+                                (srcset: InterventionRequestStrategyFormat): void => {
+                                    if (!srcset.format) {
+                                        console.warn('wrong media configuration: missing srcset.format property')
+                                    }
+                                }
+                            )
+                        }
+                    )
+                }
+            }
+
+            console.log(this.el)
+            console.groupEnd()
         }
+
+        if (this.src) {
+            if (this.mimeType) {
+                switch (this.mimeType) {
+                    case 'image/webp':
+                    case 'image/jpeg':
+                    case 'image/png':
+                    case 'image/gif':
+                    case 'image/bmp':
+                        this.component = 'intervention-request-picture'
+                        break;
+
+                    case 'image/svg':
+                    case 'image/svg+xml':
+                        this.component = 'intervention-request-svg'
+                        break;
+
+                    default:
+                        this.component = 'intervention-request-iframe'
+                        break;
+                }
+            } else {
+                switch (extractFileExtension(this.src)) {
+                    case 'webp':
+                    case 'jpg':
+                    case 'jpeg':
+                    case 'png':
+                    case 'gif':
+                    case 'bmp':
+                        this.component = 'intervention-request-picture'
+                        break;
+
+                    case 'svg':
+                        this.component = 'intervention-request-svg'
+                        break;
+
+                    default:
+                        this.component = 'intervention-request-iframe'
+                        break;
+                }
+            }
+        }
+
+        this.component = this.embed ? 'intervention-request-iframe' : this.component
     }
 
     /**
@@ -121,22 +196,25 @@ export class InterventionRequest {
      */
     componentWillRender (): void {
         /**
-         * Convert formats to array if needed
+         * Extract formats object from media
+         * & convert formats to array if needed
          * for a consistent processing
          */
-        if (this.formats) {
-            const formats = JSON.parse(this.formats)
+        if (this.media) {
+            const media = JSON.parse(this.media)
 
-            this.formatsObject = formats.length ? formats : new Array(formats)
+            if (media) {
+                this.mediaObject = media.length ? media : new Array(media)
+            }
         }
 
         /**
          * Set defaults
          */
-        this.strategy = this.strategy || (window.interventionRequestJS ? window.interventionRequestJS.strategy : 'default')
-        this.baseUrl = this.baseUrl || (window.interventionRequestJS ? window.interventionRequestJS.baseUrl : undefined)
-        this.forceIo = this.forceIo || (window.interventionRequestJS ? window.interventionRequestJS.forceIo : undefined)
-        this.loading = this.loading || (window.interventionRequestJS ? window.interventionRequestJS.loading : 'auto')
+        this.strategy = this.strategy || (window.interventionRequestJS && window.interventionRequestJS.strategy ? window.interventionRequestJS.strategy : 'default')
+        this.baseUrl = this.baseUrl || (window.interventionRequestJS && window.interventionRequestJS.baseUrl ? window.interventionRequestJS.baseUrl : undefined)
+        this.forceIo = this.forceIo || (window.interventionRequestJS && window.interventionRequestJS.forceIo ? window.interventionRequestJS.forceIo : undefined)
+        this.loading = this.loading || (window.interventionRequestJS && window.interventionRequestJS.loading ? window.interventionRequestJS.loading : 'auto')
     }
 
     /**
@@ -158,7 +236,8 @@ export class InterventionRequest {
                         baseUrl={ this.baseUrl }
                         force-io={ this.forceIo }
                         loading={ this.loading }
-                        formats={ this.formatsObject } />
+                        media={ this.mediaObject }
+                        mimeType={ this.mimeType }/>
                 }
                 <slot />
             </Host>

@@ -10,13 +10,24 @@
  * @return boolean
  */
 export function isWebp(filename: string): boolean {
-    return filename.split('.').pop().toLowerCase() === 'webp'
+    return checkFileExtension(filename, 'webp')
 }
 
 /**
- * Console log wrapper
- * @param message
+ * Check file extension
+ * @param filename
+ * @param extension
+ * @return boolean
  */
-export function log(message: string): void {
-    console.log('%cintervention request', 'background: #540c82; color: #fff; padding: 2px 4px;', message)
+export function checkFileExtension(filename: string, extension: string): boolean {
+    return extractFileExtension(filename) === extension
+}
+
+/**
+ * Extract file extension
+ * @param filename
+ * @return string
+ */
+export function extractFileExtension(filename: string): string {
+    return filename.split('.').pop().toLowerCase()
 }

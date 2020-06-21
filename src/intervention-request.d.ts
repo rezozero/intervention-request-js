@@ -1,30 +1,38 @@
-import { InterventionRequestOperations, InterventionRequestStrategies } from './strategies'
+import {
+    InterventionRequestStrategyFormat,
+    InterventionRequestStrategies,
+    InterventionRequestStrategyOperations
+} from './strategies'
 
 export namespace  InterventionRequest {
     interface Configurations {
+        debug?: boolean | string
         strategy?: string
         baseUrl?: string
         forceIo?: boolean
+        mimeType?: string
+        fileuploadFolder?: string
         loading: 'lazy' | 'eager' | 'auto'
         strategies?: InterventionRequestStrategies
-        mediaOptions?: InterventionRequestOperations
+        mediaOptions?: InterventionRequestStrategyOperations
     }
 
     interface Format {
         media?: string
-        sizes?: string
-        srcset?: Array<InterventionRequestOperations>
+        rule?: string
+        srcset?: Array<InterventionRequestStrategyFormat>
     }
 
-    type Formats = Array<Format>
+    type Media = Array<Format>
 }
 
 export interface InterventionRequestConfigurations extends InterventionRequest.Configurations {}
 export interface InterventionRequestFormat extends InterventionRequest.Format {}
-export interface InterventionRequestFormats extends InterventionRequest.Formats {}
+export interface InterventionRequestMedia extends InterventionRequest.Media {}
 
 declare global {
     interface Window {
         interventionRequestJS: InterventionRequestConfigurations
+        irCounter: number
     }
 }

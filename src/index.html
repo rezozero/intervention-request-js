@@ -10,48 +10,53 @@
     </style>
 </head>
 <body>
-    <div style="background: #d00; height: 4000px;"></div>
-    <p>1</p>
     <intervention-request
         alt="Cherry Blossom"
         src="cherry-blossom.jpg"
         width="1920"
         height="1080"
         base-url="http://localhost:8484/assets"
-        formats='[{"srcset":[{"fit":"800x600", "rule": "800w"}, {"fit":"1200x800", "rule": "1200w"}, {"fit":"1920x1080", "rule": "1920w"}]}]'
+        media='[{"srcset":[{"format":{"fit":"1920x980","quality":80},"rule":"1x"}],"rule":"(min-width: 1280px)"},{"srcset":[{"format":{"fit":"1280x730","quality":80},"rule":"1x"}],"rule":"(min-width: 768px)"},{"srcset":[{"format":{"fit":"768x512","quality":80},"rule":"1x"},{"format":{"fit":"1536x1024","quality":70},"rule":"2x"}],"rule":"(min-width: 480px)"},{"srcset":[{"format":{"fit":"480x320","quality":80},"rule":"1x"},{"format":{"fit":"480x320","quality":80},"rule":"2x"}],"rule":"(max-width: 479px)"}]'
         force-io>
     </intervention-request>
 
-    <p>2</p>
     <intervention-request
         alt="Asphalt"
         src="asphalt.jpg"
         classes="class1,class2"
         base-url="http://localhost:8484/assets"
-        formats='[{"media":"(max-width: 1024px)","sizes":"100vw","srcset":[{"fit":"300x300", "rule": "300w"}, {"fit":"600x600", "rule": "600w"}, {"fit":"1200x1200", "rule": "1200w"}]}, {"media":"screen","sizes":"50vw","srcset":[{"fit":"800x600", "rule": "800w"}, {"fit":"1200x800", "rule": "1200w"}]}]'>
+        media='[{"media":"(max-width: 1024px)","sizes":"100vw","srcset":[{"fit":"300x300", "rule": "300w"}, {"fit":"600x600", "rule": "600w"}, {"fit":"1200x1200", "rule": "1200w"}]}, {"media":"screen","sizes":"50vw","srcset":[{"fit":"800x600", "rule": "800w"}, {"fit":"1200x800", "rule": "1200w"}]}]'>
     </intervention-request>
 
-    <p>3</p>
     <intervention-request
-        alt="Image sans source"
+        alt="Asphalt"
         src="asphalt.jpg"
-        strategy="machin">
+        classes="class1,class2"
+        base-url="http://localhost:8484/assets"
+        media='[{"media":"(max-width: 1024px)","rule":"100vw","srcset":[{"fit":"300x300", "rule": "300w"}, {"fit":"600x600", "rule": "600w"}, {"fit":"1200x1200", "rule": "1200w"}]}, {"media":"screen","rule":"50vw","srcset":[{"fit":"800x600", "rule": "800w"}, {"fit":"1200x800", "rule": "1200w"}]}]'>
     </intervention-request>
 
-    <p>4</p>
+    <intervention-request
+        alt="Asphalte sans formats"
+        src="asphalt.jpg">
+    </intervention-request>
+
+    <intervention-request
+        alt="Asphalte sans formats"
+        src="images/vector/csr-leaf.svg">
+    </intervention-request>
+
     <intervention-request
         alt="Image sans source"
         strategy="machin">
     </intervention-request>
 
-    <p>4</p>
     <intervention-request
         src="sample.jpg"
         strategy="cloudinary"
-        formats='[{"srcset":[{"width":800, "rule": "800w"}, {"width":1200, "rule": "1200w"}]}]'>
+        media='[{"srcset":[{"width":800, "rule": "800w"}, {"width":1200, "rule": "1200w"}]}]'>
     </intervention-request>
 
-    <p>5</p>
     <intervention-request
         src="https://res.cloudinary.com/demo/image/upload/w_0.5/sample.jpg"
         classes="class1 class2"
@@ -63,7 +68,9 @@
          * Override intervention request default configurations
          * @type InterventionRequestConfigurations
          */
-        window.xinterventionRequestJS = {
+        window.interventionRequestJS = {
+            debug: true,
+
             /**
              * Default strategy
              * Applied on each element without strategy props provided

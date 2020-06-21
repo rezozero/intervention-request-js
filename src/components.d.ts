@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { InterventionRequestFormats } from "./intervention-request";
+import { InterventionRequestMedia } from "./intervention-request";
 export namespace Components {
     interface InterventionRequest {
         /**
@@ -17,10 +17,6 @@ export namespace Components {
          */
         "baseUrl"?: string;
         /**
-          * Component additionnal classnames
-         */
-        "classes"?: string;
-        /**
           * Embed mode use iframe if true
          */
         "embed"?: boolean;
@@ -28,10 +24,6 @@ export namespace Components {
           * Force intersection observer for lazy load
          */
         "forceIo"?: boolean;
-        /**
-          * Source list
-         */
-        "formats"?: string;
         /**
           * Height attribute
          */
@@ -41,6 +33,14 @@ export namespace Components {
           * @default auto
          */
         "loading"?: 'lazy' | 'eager' | 'auto';
+        /**
+          * Source list
+         */
+        "media"?: string;
+        /**
+          * Mime type
+         */
+        "mimeType"?: string;
         /**
           * Source
          */
@@ -77,10 +77,6 @@ export namespace Components {
          */
         "src": string;
         /**
-          * Strategy
-         */
-        "strategy": string;
-        /**
           * Width attribute
          */
         "width": number;
@@ -99,10 +95,6 @@ export namespace Components {
          */
         "forceIo"?: boolean;
         /**
-          * Source list
-         */
-        "formats"?: InterventionRequestFormats;
-        /**
           * Height attribute
          */
         "height"?: number;
@@ -110,6 +102,14 @@ export namespace Components {
           * Loading type
          */
         "loading": 'lazy' | 'eager' | 'auto';
+        /**
+          * Source list
+         */
+        "media"?: InterventionRequestMedia;
+        /**
+          * Mime type
+         */
+        "mimeType"?: string;
         /**
           * Source
          */
@@ -122,6 +122,28 @@ export namespace Components {
           * Width attribute
          */
         "width"?: number;
+    }
+    interface InterventionRequestSvg {
+        /**
+          * Alt attribute
+         */
+        "alt": string;
+        /**
+          * Base URL
+         */
+        "baseUrl"?: string;
+        /**
+          * Height attribute
+         */
+        "height": number;
+        /**
+          * Source
+         */
+        "src": string;
+        /**
+          * Width attribute
+         */
+        "width": number;
     }
 }
 declare global {
@@ -143,10 +165,17 @@ declare global {
         prototype: HTMLInterventionRequestPictureElement;
         new (): HTMLInterventionRequestPictureElement;
     };
+    interface HTMLInterventionRequestSvgElement extends Components.InterventionRequestSvg, HTMLStencilElement {
+    }
+    var HTMLInterventionRequestSvgElement: {
+        prototype: HTMLInterventionRequestSvgElement;
+        new (): HTMLInterventionRequestSvgElement;
+    };
     interface HTMLElementTagNameMap {
         "intervention-request": HTMLInterventionRequestElement;
         "intervention-request-iframe": HTMLInterventionRequestIframeElement;
         "intervention-request-picture": HTMLInterventionRequestPictureElement;
+        "intervention-request-svg": HTMLInterventionRequestSvgElement;
     }
 }
 declare namespace LocalJSX {
@@ -160,10 +189,6 @@ declare namespace LocalJSX {
          */
         "baseUrl"?: string;
         /**
-          * Component additionnal classnames
-         */
-        "classes"?: string;
-        /**
           * Embed mode use iframe if true
          */
         "embed"?: boolean;
@@ -171,10 +196,6 @@ declare namespace LocalJSX {
           * Force intersection observer for lazy load
          */
         "forceIo"?: boolean;
-        /**
-          * Source list
-         */
-        "formats"?: string;
         /**
           * Height attribute
          */
@@ -184,6 +205,14 @@ declare namespace LocalJSX {
           * @default auto
          */
         "loading"?: 'lazy' | 'eager' | 'auto';
+        /**
+          * Source list
+         */
+        "media"?: string;
+        /**
+          * Mime type
+         */
+        "mimeType"?: string;
         /**
           * Source
          */
@@ -220,10 +249,6 @@ declare namespace LocalJSX {
          */
         "src": string;
         /**
-          * Strategy
-         */
-        "strategy"?: string;
-        /**
           * Width attribute
          */
         "width"?: number;
@@ -242,10 +267,6 @@ declare namespace LocalJSX {
          */
         "forceIo"?: boolean;
         /**
-          * Source list
-         */
-        "formats"?: InterventionRequestFormats;
-        /**
           * Height attribute
          */
         "height"?: number;
@@ -253,6 +274,14 @@ declare namespace LocalJSX {
           * Loading type
          */
         "loading"?: 'lazy' | 'eager' | 'auto';
+        /**
+          * Source list
+         */
+        "media"?: InterventionRequestMedia;
+        /**
+          * Mime type
+         */
+        "mimeType"?: string;
         /**
           * Source
          */
@@ -266,10 +295,33 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
+    interface InterventionRequestSvg {
+        /**
+          * Alt attribute
+         */
+        "alt"?: string;
+        /**
+          * Base URL
+         */
+        "baseUrl"?: string;
+        /**
+          * Height attribute
+         */
+        "height"?: number;
+        /**
+          * Source
+         */
+        "src": string;
+        /**
+          * Width attribute
+         */
+        "width"?: number;
+    }
     interface IntrinsicElements {
         "intervention-request": InterventionRequest;
         "intervention-request-iframe": InterventionRequestIframe;
         "intervention-request-picture": InterventionRequestPicture;
+        "intervention-request-svg": InterventionRequestSvg;
     }
 }
 export { LocalJSX as JSX };
@@ -279,6 +331,7 @@ declare module "@stencil/core" {
             "intervention-request": LocalJSX.InterventionRequest & JSXBase.HTMLAttributes<HTMLInterventionRequestElement>;
             "intervention-request-iframe": LocalJSX.InterventionRequestIframe & JSXBase.HTMLAttributes<HTMLInterventionRequestIframeElement>;
             "intervention-request-picture": LocalJSX.InterventionRequestPicture & JSXBase.HTMLAttributes<HTMLInterventionRequestPictureElement>;
+            "intervention-request-svg": LocalJSX.InterventionRequestSvg & JSXBase.HTMLAttributes<HTMLInterventionRequestSvgElement>;
         }
     }
 }
