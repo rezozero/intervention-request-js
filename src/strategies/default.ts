@@ -7,7 +7,7 @@ import { InterventionRequestStrategy } from '../strategies'
 
 const defaultStrategy: InterventionRequestStrategy = {
     name: 'default',
-    baseUrl: 'assets',
+    baseUrl: '/assets',
     ampersand: '-',
     webp: true
 }

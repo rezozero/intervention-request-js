@@ -48,7 +48,7 @@ export class InterventionRequestSvg {
      * @return HTMLInterventionRequestSvgElement
      */
     render(): HTMLInterventionRequestSvgElement {
-        const fileUploadFolder = window.interventionRequestJS && window.interventionRequestJS.fileuploadFolder ? window.interventionRequestJS.fileuploadFolder : 'files'
+        const fileUploadFolder = window.interventionRequestJS && window.interventionRequestJS.fileuploadFolder ? window.interventionRequestJS.fileuploadFolder : '/files'
 
         return (
             <Host>
