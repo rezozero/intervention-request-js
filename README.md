@@ -5,9 +5,13 @@ Web component for building HTML picture tags using [Intervention Request](https:
 
 ## Installation
 ### From npm registry
-`yarn add @rezozero/intervention-request-js`
+```sh
+yarn add @rezozero/intervention-request-js
+```
 or
-`npm install @rezozero/intervention-request-js`
+```sh
+npm install @rezozero/intervention-request-js
+```
 
 ### Link package (Dev purpose)
 ```sh

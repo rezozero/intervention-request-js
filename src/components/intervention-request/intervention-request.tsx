@@ -17,7 +17,6 @@ export class InterventionRequest {
     /**
      * Own properties
      */
-    private mediaObject: InterventionRequestMedia
     private component: string
     private classnames: string
 
@@ -58,10 +57,10 @@ export class InterventionRequest {
     baseUrl?: string
 
     /**
-     * Source list
+     * Media formats
      */
     @Prop()
-    media?: string
+    formats?: string
 
     /**
      * Mime type
@@ -103,12 +102,46 @@ export class InterventionRequest {
     @Prop()
     loading?: 'lazy' | 'eager' | 'auto'
 
+    private media?: InterventionRequestMedia
+
     /**
      * Component wiill load
      * Component lifecycle method
      * @return void
      */
     componentWillLoad(): void {
+        if (this.formats) {
+            const formats = JSON.parse(this.formats)
+
+            /**
+             * Extract the media property
+             * or build one if it doesn't exist
+             */
+            if (formats.media) {
+                this.media = formats.media
+            } else {
+                const srcset = {
+                    format: {
+                        ...formats
+                    }
+                }
+
+                this.media = [ { srcset: [ srcset ] } ]
+            }
+
+            /**
+             * Use formats dimensions
+             * for width & height
+             */
+            if (formats.width) {
+                this.width = formats.width
+            }
+
+            if (formats.height) {
+                this.height = formats.height
+            }
+        }
+
         if (window.interventionRequestJS && window.interventionRequestJS.debug) {
             console.groupCollapsed('%cIntervention Request', 'font-size: 10px; font-weight: normal; background: #673ab7; color: #fff; padding: 2px 4px; border-radius: 3px')
 
@@ -121,20 +154,21 @@ export class InterventionRequest {
             console.info('strategy: %s', this.strategy || 'default')
 
             if (this.media) {
-                const media = JSON.parse(this.media)
 
-                console.log('media', media)
+                console.log('media', this.media)
 
-                if (media) {
-                    media.forEach(
+                if (this.media) {
+                    this.media.forEach(
                         (media: InterventionRequestFormat): void => {
-                            media.srcset.forEach(
-                                (srcset: InterventionRequestStrategyFormat): void => {
-                                    if (!srcset.format) {
-                                        console.warn('wrong media configuration: missing srcset.format property')
+                            if (media.srcset) {
+                                media.srcset.forEach(
+                                    (srcset: InterventionRequestStrategyFormat): void => {
+                                        if (!srcset.format) {
+                                            console.warn('wrong media configuration: missing srcset.format property')
+                                        }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                     )
                 }
@@ -196,19 +230,6 @@ export class InterventionRequest {
      */
     componentWillRender (): void {
         /**
-         * Extract formats object from media
-         * & convert formats to array if needed
-         * for a consistent processing
-         */
-        if (this.media) {
-            const media = JSON.parse(this.media)
-
-            if (media) {
-                this.mediaObject = media.length ? media : new Array(media)
-            }
-        }
-
-        /**
          * Set defaults
          */
         this.strategy = this.strategy || (window.interventionRequestJS && window.interventionRequestJS.strategy ? window.interventionRequestJS.strategy : 'default')
@@ -236,7 +257,7 @@ export class InterventionRequest {
                         baseUrl={ this.baseUrl }
                         force-io={ this.forceIo }
                         loading={ this.loading }
-                        media={ this.mediaObject }
+                        media={ this.media }
                         mimeType={ this.mimeType }/>
                 }
                 <slot />

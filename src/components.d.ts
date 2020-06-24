@@ -25,6 +25,10 @@ export namespace Components {
          */
         "forceIo"?: boolean;
         /**
+          * Media formats
+         */
+        "formats"?: string;
+        /**
           * Height attribute
          */
         "height": number;
@@ -33,10 +37,6 @@ export namespace Components {
           * @default auto
          */
         "loading"?: 'lazy' | 'eager' | 'auto';
-        /**
-          * Source list
-         */
-        "media"?: string;
         /**
           * Mime type
          */
@@ -197,6 +197,10 @@ declare namespace LocalJSX {
          */
         "forceIo"?: boolean;
         /**
+          * Media formats
+         */
+        "formats"?: string;
+        /**
           * Height attribute
          */
         "height"?: number;
@@ -205,10 +209,6 @@ declare namespace LocalJSX {
           * @default auto
          */
         "loading"?: 'lazy' | 'eager' | 'auto';
-        /**
-          * Source list
-         */
-        "media"?: string;
         /**
           * Mime type
          */

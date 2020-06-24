@@ -235,8 +235,7 @@ export class InterventionRequestPicture {
                             sources.push(
                                 <source
                                     type={ 'image/webp' }
-                                    media={ format.media }
-                                    sizes={ format.rule }
+                                    media={ format.rule }
                                     data-srcset={ srcset.join(', ').replace(new RegExp(this.src, 'g'), `${this.src}.webp`) } />
                             )
                         }
@@ -248,8 +247,7 @@ export class InterventionRequestPicture {
                         sources.push(
                             <source
                                 type={ this.mimeType }
-                                media={ format.media }
-                                sizes={ format.rule }
+                                media={ format.rule }
                                 data-srcset={ srcset.join(', ') } />
                         )
 

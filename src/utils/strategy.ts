@@ -125,7 +125,7 @@ export default class Strategy implements InterventionRequestStrategy {
     public formatPath (source: string, operations: InterventionRequestStrategyFormat, baseUrl: string | undefined = undefined, rule: boolean = false): string {
         let path = `${baseUrl || this.baseUrl}/${this.computedOperations(operations.format)}/${source}`
 
-        if (rule) {
+        if (rule && operations.rule) {
             path += ` ${operations.rule}`
         }
 
