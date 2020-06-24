@@ -1,4 +1,4 @@
-import { Element, Component, Prop, Host, h } from '@stencil/core'
+import { Element, Component, Prop, Host, h, Listen, State } from '@stencil/core'
 import { InterventionRequestFormat, InterventionRequestMedia } from '../../intervention-request'
 import { InterventionRequestStrategyFormat } from '../../strategies'
 import { extractFileExtension } from '../../utils/utils'
@@ -18,7 +18,6 @@ export class InterventionRequest {
      * Own properties
      */
     private component: string
-    private classnames: string
 
     /**
      * Component element reference
@@ -102,6 +101,18 @@ export class InterventionRequest {
     @Prop()
     loading?: 'lazy' | 'eager' | 'auto'
 
+    @State()
+    private classnames: string = ''
+
+
+    /**
+     * Loading complete listener
+     */
+    @Listen('loadingCompleted')
+    handleLoadingCompleted (): void {
+        this.classnames += ' loaded'
+    }
+
     private media?: InterventionRequestMedia
 
     /**
@@ -110,9 +121,9 @@ export class InterventionRequest {
      * @return void
      */
     componentWillLoad(): void {
-        if (this.formats) {
-            const formats = JSON.parse(this.formats)
+        const formats = this.formats ? JSON.parse(this.formats) : false
 
+        if (formats) {
             /**
              * Extract the media property
              * or build one if it doesn't exist

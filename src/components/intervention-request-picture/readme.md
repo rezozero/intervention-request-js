@@ -21,6 +21,13 @@
 | `width`            | `width`     | Width attribute                           | `number`                      | `undefined` |
 
 
+## Events
+
+| Event              | Description                     | Type                   |
+| ------------------ | ------------------------------- | ---------------------- |
+| `loadingCompleted` | Loading completed event emitter | `CustomEvent<boolean>` |
+
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

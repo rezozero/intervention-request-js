@@ -283,6 +283,10 @@ declare namespace LocalJSX {
          */
         "mimeType"?: string;
         /**
+          * Loading completed event emitter
+         */
+        "onLoadingCompleted"?: (event: CustomEvent<boolean>) => void;
+        /**
           * Source
          */
         "src": string;

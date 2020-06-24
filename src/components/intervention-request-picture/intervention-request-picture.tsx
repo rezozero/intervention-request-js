@@ -1,4 +1,4 @@
-import { Component, Prop, Host, h, Element, State } from '@stencil/core'
+import { Component, Prop, Host, h, Element, State, Event, EventEmitter } from '@stencil/core'
 import strategies from '../../strategies/index'
 import Strategy from '../../utils/strategy'
 import { isWebp } from '../../utils/utils'
@@ -91,8 +91,17 @@ export class InterventionRequestPicture {
     @Prop()
     loading: 'lazy' | 'eager' | 'auto'
 
+    /**
+     * Media loaded
+     */
     @State()
     private loaded: boolean = false
+
+    /**
+     * Loading completed event emitter
+     */
+    @Event()
+    private loadingCompleted: EventEmitter<boolean>
 
     /**
      * Component wiill load
@@ -170,6 +179,10 @@ export class InterventionRequestPicture {
      */
     public onReady (): void {
         this.loaded = true
+
+        if (this.loadingCompleted) {
+            this.loadingCompleted.emit(true)
+        }
     }
 
     /**
