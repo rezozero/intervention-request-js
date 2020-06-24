@@ -46,7 +46,15 @@ See details on [StencilJS documentation](https://stenciljs.com/docs/overview)
     alt="My sample image"
     width="1280"
     height="768"
-    formats='[{"media":"screen","sizes":"100vw","srcset":[{"fit":"640x384", "rule": "640w"}, {"fit":"1280x768", "rule": "1280w"}]}]'>
+    formats='{
+         "width": 1024,
+         "height": 768,
+         "media": [
+             {"srcset":[{"format":{"fit":"1920x980","quality":80},"rule":"1x"}, {"format":{"fit":"3840x1960","quality":80},"rule":"2x"}], "rule":"(min-width: 1280px)"},
+             {"srcset":[{"format":{"fit":"768x320","quality":80},"rule":"1x"}], "rule":"(min-width: 768px)"},
+             {"srcset":[{"format":{"fit":"400x280","quality":80},"rule":"1x"}]}
+         ]
+     }'>
 </intervention-request>
 ```
 ## Attributes
