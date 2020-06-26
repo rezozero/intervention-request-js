@@ -1,4 +1,4 @@
-import { Component, Prop, Host, h, Element, State, Event, EventEmitter } from '@stencil/core'
+import { Component, Prop, Host, h, Element, State, Event, EventEmitter, Watch } from '@stencil/core'
 import strategies from '../../strategies/index'
 import Strategy from '../../utils/strategy'
 import { isWebp } from '../../utils/utils'
@@ -103,6 +103,13 @@ export class InterventionRequestPicture {
     @Event()
     private loadingCompleted: EventEmitter<boolean>
 
+    @Watch('src')
+    sourceHandler (): void {
+        console.log('src changed', this.observer)
+        this.resetMedia()
+        this.initObserver()
+    }
+
     /**
      * Component wiill load
      * Component lifecycle method
@@ -170,6 +177,21 @@ export class InterventionRequestPicture {
                 if (element.dataset.srcset) {
                     element.setAttribute('srcset', element.dataset.srcset)
                 }
+            }
+        )
+    }
+
+    /**
+     * Load media
+     * Toggle attribures
+     */
+    private resetMedia (): void {
+        const elements = this.el.querySelectorAll('source, img')
+
+        elements.forEach(
+            (element: HTMLSourceElement|HTMLImageElement): void => {
+                element.removeAttribute('src')
+                element.removeAttribute('srcset')
             }
         )
     }
