@@ -22,6 +22,7 @@ cd && git clone git@github.com:rezozero/intervention-request-js.git
 cd ~/intervention-request-js
 
 # Build the package
+yarn 
 yarn build
 
 # Create the package folder symlink

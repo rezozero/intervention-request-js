@@ -105,7 +105,9 @@ export class InterventionRequestPicture {
 
     @Watch('src')
     sourceHandler (): void {
-        console.log('src changed', this.observer)
+        if (window.interventionRequestJS && window.interventionRequestJS.debug) {
+            console.log('src changed', this.observer)
+        }
         this.resetMedia()
         this.initObserver()
     }
@@ -163,7 +165,7 @@ export class InterventionRequestPicture {
 
     /**
      * Load media
-     * Toggle attribures
+     * Toggle attributes
      */
     private loadMedia (): void {
         const elements = this.el.querySelectorAll('source, img')
@@ -310,6 +312,7 @@ export class InterventionRequestPicture {
         } else {
             const operations: InterventionRequestStrategyFormat = {
                 format: {
+                    // TODO: Use "crop" operation detail to size image if width and height are not defined
                     width: this.width || window.innerWidth,
                     height: this.height || Math.floor(window.innerWidth * 3 / 4)
                 }

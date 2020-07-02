@@ -116,7 +116,7 @@ export class InterventionRequest {
     private media?: InterventionRequestMedia
 
     /**
-     * Component wiill load
+     * Component will load
      * Component lifecycle method
      * @return void
      */
