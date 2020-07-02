@@ -6,11 +6,11 @@ Web component for building HTML picture tags using [Intervention Request](https:
 ## Installation
 ### From npm registry
 ```sh
-yarn add @rezozero/intervention-request-js
+yarn add @rezo-zero/intervention-request
 ```
 or
 ```sh
-npm install @rezozero/intervention-request-js
+npm install @rezo-zero/intervention-request
 ```
 
 ### Link package (Dev purpose)
@@ -31,7 +31,7 @@ yarn link
 cd ~/other-repository
 
 # Link our package
-yarn link @rezozero/intervention-request
+yarn link @rezo-zero/intervention-request
 ```
 For webpack user disable [symlinks resolution](https://webpack.js.org/configuration/resolve/#resolvesymlinks) by setting `resolve.symlinks` to `false` inside your bundler configuration
 
