@@ -11,6 +11,8 @@
 | ------------------ | ----------- | ----------------------------------------- | ----------------------------- | ----------- |
 | `alt`              | `alt`       | Alt attribute                             | `string`                      | `undefined` |
 | `baseUrl`          | `base-url`  | Base URL                                  | `string`                      | `undefined` |
+| `crop`             | `crop`      | Crop attribute                            | `string`                      | `undefined` |
+| `fit`              | `fit`       | Fit attribute                             | `string`                      | `undefined` |
 | `forceIo`          | `force-io`  | Force intersection observer for lazy load | `boolean`                     | `undefined` |
 | `height`           | `height`    | Height attribute                          | `number`                      | `undefined` |
 | `loading`          | `loading`   | Loading type                              | `"auto" \| "eager" \| "lazy"` | `undefined` |

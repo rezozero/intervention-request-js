@@ -91,6 +91,14 @@ export namespace Components {
          */
         "baseUrl": string;
         /**
+          * Crop attribute
+         */
+        "crop"?: string;
+        /**
+          * Fit attribute
+         */
+        "fit"?: string;
+        /**
           * Force intersection observer for lazy load
          */
         "forceIo"?: boolean;
@@ -262,6 +270,14 @@ declare namespace LocalJSX {
           * Base URL
          */
         "baseUrl"?: string;
+        /**
+          * Crop attribute
+         */
+        "crop"?: string;
+        /**
+          * Fit attribute
+         */
+        "fit"?: string;
         /**
           * Force intersection observer for lazy load
          */

@@ -43,6 +43,18 @@ export class InterventionRequestPicture {
     alt: string
 
     /**
+     * Crop attribute
+     */
+    @Prop()
+    crop?: string
+
+    /**
+     * Fit attribute
+     */
+    @Prop()
+    fit?: string
+
+    /**
      * Width attribute
      */
     @Prop()
@@ -221,6 +233,9 @@ export class InterventionRequestPicture {
     private buildPicture(): HTMLPictureElement {
         let mediaElements: Array<any> = []
         let fallbackSources!: string
+        let cropFitOperation = this.crop || this.fit
+
+        // const cropFitOperationArray = cropFitOperation.split('x')
 
         if (this.media && this.media.length) {
             /**
@@ -254,6 +269,7 @@ export class InterventionRequestPicture {
                         srcset = format.srcset.map(
                             (source: InterventionRequestStrategyFormat, sourceIndex: number): string => {
                                 if (formatIndex === this.media.length -1 && sourceIndex === format.srcset.length - 1) {
+                                    cropFitOperation = source.format.crop || source.format.fit
                                     fallbackSources = this.strategyInstance.formatPath(this.src, source, this.baseUrl)
                                 }
 
@@ -289,6 +305,17 @@ export class InterventionRequestPicture {
                         )
 
                         /**
+                         * Set width & height
+                         * according to fallback width & height fit / crop operation
+                         */
+                        if (cropFitOperation) {
+                            const cropFitOperationArray = cropFitOperation.split('x')
+
+                            this.width = parseInt(cropFitOperationArray[0])
+                            this.height = parseInt(cropFitOperationArray[1])
+                        }
+
+                        /**
                          * Generate fallback
                          */
                         if (fallbackSources) {
@@ -310,18 +337,27 @@ export class InterventionRequestPicture {
                 }
             )
         } else {
-            const operations: InterventionRequestStrategyFormat = {
-                format: {
-                    // TODO: Use "crop" operation detail to size image if width and height are not defined
-                    width: this.width || window.innerWidth,
-                    height: this.height || Math.floor(window.innerWidth * 3 / 4)
-                }
+            const operations: InterventionRequestStrategyFormat = {}
+
+            this.width = this.width || window.innerWidth
+            this.height = this.height || Math.floor(window.innerWidth * 3 / 4)
+
+            /**
+             * Set width & height
+             * according to fallback width & height fit / crop operation
+             */
+            if (cropFitOperation) {
+                const cropFitOperationArray = cropFitOperation.split('x')
+
+                this.width = parseInt(cropFitOperationArray[0])
+                this.height = parseInt(cropFitOperationArray[1])
             }
 
             if (window.interventionRequestJS) {
                 operations.format = {
                     ...window.interventionRequestJS.mediaOptions,
-                    ...operations.format
+                    width: this.width,
+                    height: this.height
                 }
             }
 
