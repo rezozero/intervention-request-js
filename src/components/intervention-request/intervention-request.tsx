@@ -88,15 +88,14 @@ export class InterventionRequest {
     forceIo?: boolean
 
     /**
-     * Disable url processing
-     * source is directly applied as it is in attributes
+     * Disable url processing.
+     * Source is directly applied as it is in attributes
      */
     @Prop()
     noProcess?: boolean
 
     /**
-     * Loading type
-     * Native lazyloading.
+     * Native lazyloading
      * see https://caniuse.com/#feat=loading-lazy-attr
      * see https://web.dev/native-lazy-loading/
      *

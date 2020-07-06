@@ -6,20 +6,11 @@
     <title>Intervention Request</title>
     <style>
         * { margin: 0; padding: 0; }
-        picture { border: 1px solid red; }
-        img:not([src]) { border: 2px solid red; }
     </style>
 </head>
 <body>
     <intervention-request
-        alt="My media"
-        src="https://api-biennaledelyon.rezo-zero.dev/assets/w900-h900-q80/14a78bdf/2008_theatre_de_venissieux_02.jpg"
-        no-process
-        force-io
-    >
-    </intervention-request>
-    <intervention-request
-        alt="1. Cherry Blossom"
+        alt="Cherry Blossom"
         src="cherry-blossom.jpg"
         width="1920"
         height="1080"
@@ -37,54 +28,15 @@
     </intervention-request>
 
     <intervention-request
-        alt="2. Asphalt"
-        src="asphalt.jpg"
-        width="1920"
-        height="1080"
-        base-url="http://localhost:8484/assets"
-        formats='{"width":"400","height":"400","fit":"800x800","crop":"400x400","quality":"1"}'
-        force-io>
-    </intervention-request>
-
-    <intervention-request
-        alt="3. Cherry Blossom"
-        src="cherry-blossom.jpg"
-        width="1920"
-        height="1080"
-        base-url="http://localhost:8484/assets"
-        force-io>
-    </intervention-request>
-
-    <intervention-request
         alt="Asphalt"
         src="asphalt.jpg"
         classes="class1,class2"
         base-url="http://localhost:8484/assets"
-        formats='{
-            "media": [
-                {"srcset":[{"fit":"300x300", "rule": "300w"}, {"fit":"600x600", "rule": "600w"}, {"fit":"1200x1200", "rule": "1200w"}]},
-                {"srcset":[{"fit":"800x600", "rule": "800w"}, {"fit":"1200x800", "rule": "1200w"}]}
-            ]
-        }'>
+        formats='{"width": 1920, "height": 800, "quality": 50}'>
     </intervention-request>
 
     <intervention-request
-        alt="4. Asphalte sans formats"
-        src="asphalt.jpg">
-    </intervention-request>
-
-    <intervention-request
-        alt="5. Asphalt sans formats"
-        src="images/vector/csr-leaf.svg">
-    </intervention-request>
-
-    <intervention-request
-        alt="6. Image sans source"
-        strategy="machin">
-    </intervention-request>
-
-    <intervention-request
-        alt="7."
+        alt="Cloudinary"
         src="sample.jpg"
         strategy="cloudinary"
         formats='{
@@ -94,13 +46,6 @@
                 {"srcset":[{"format":{"width":360, "quality":80}}]}
             ]
         }'>
-    </intervention-request>
-
-    <intervention-request
-        alt="8."
-        src="https://res.cloudinary.com/demo/image/upload/w_0.5/sample.jpg"
-        classes="class1 class2"
-        embed>
     </intervention-request>
 
     <script>

@@ -13,30 +13,6 @@ or
 npm install @rezo-zero/intervention-request
 ```
 
-### Link package (Dev purpose)
-```sh
-# Clone the package repository
-cd && git clone git@github.com:rezozero/intervention-request-js.git
-
-# Change your working directory into the package directory
-cd ~/intervention-request-js
-
-# Build the package
-yarn 
-yarn build
-
-# Create the package folder symlink
-yarn link
-
-# Change to an other package or project directory
-cd ~/other-repository
-
-# Link our package
-yarn link @rezo-zero/intervention-request
-```
-For webpack user disable [symlinks resolution](https://webpack.js.org/configuration/resolve/#resolvesymlinks) by setting `resolve.symlinks` to `false` inside your bundler configuration
-
-
 ## Framework integration
 See details on [StencilJS documentation](https://stenciljs.com/docs/overview)
 
@@ -45,6 +21,7 @@ See details on [StencilJS documentation](https://stenciljs.com/docs/overview)
 <intervention-request
     src="folder/filename.jpg"
     alt="My sample image"
+    baseUrl="https://intervention-request.test"
     width="1280"
     height="768"
     formats='{
@@ -59,4 +36,52 @@ See details on [StencilJS documentation](https://stenciljs.com/docs/overview)
 </intervention-request>
 ```
 ## Attributes
-@todo
+See all available components attributes [here](src/components/intervention-request/readme.md)
+
+## Global configurations & overrides
+A common configuration can be defined via the global variable `interventionRequestJS` as follows
+```javascript
+/**
+ * Override intervention request default configurations
+ * @type InterventionRequestConfigurations
+ */
+window.interventionRequestJS = {
+    /**
+     * Enable debug mode
+     */
+    debug: true,
+
+    /**
+     * Default strategy
+     * Applied on each element without strategy props provided
+     */
+    strategy: 'default',
+
+    /**
+     * Default loading typee
+     */
+    loading: 'lazy',
+
+    /**
+     * Strategies config overrides
+     */
+    strategies: {
+        default: { baseUrl: 'http://intervention.local/assets' },
+        cloudinary: { baseUrl: 'https://res.cloudinary.com/demo/image/upload' }
+
+        /**
+         * New strategy can be added here
+         * @type InterventionRequestStrategy
+         */
+    },
+
+    /**
+     * Default media options
+     * Applied on every media if no props override provided
+     */
+    mediaOptions: {
+        quality: 100,
+        progressive: 0
+    }
+}
+```

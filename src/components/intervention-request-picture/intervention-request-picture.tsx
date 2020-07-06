@@ -234,6 +234,8 @@ export class InterventionRequestPicture {
         let mediaElements: Array<any> = []
         let fallbackSources!: string
         let cropFitOperation = this.crop || this.fit
+        let width = this.width
+        let height = this.height
 
         if (this.media && this.media.length) {
             /**
@@ -309,8 +311,8 @@ export class InterventionRequestPicture {
                         if (cropFitOperation) {
                             const cropFitOperationArray = cropFitOperation.split('x')
 
-                            this.width = parseInt(cropFitOperationArray[0])
-                            this.height = parseInt(cropFitOperationArray[1])
+                            width = parseInt(cropFitOperationArray[0])
+                            height = parseInt(cropFitOperationArray[1])
                         }
 
                         /**
@@ -319,8 +321,8 @@ export class InterventionRequestPicture {
                         if (fallbackSources) {
                             sources.push(
                                 <img
-                                    width={ this.width }
-                                    height={ this.height }
+                                    width={ width }
+                                    height={ height }
                                     sizes={ format.rule }
                                     alt={ this.alt || this.src }
                                     loading={ this.loading }
@@ -337,8 +339,8 @@ export class InterventionRequestPicture {
         } else {
             const operations: InterventionRequestStrategyFormat = {}
 
-            this.width = this.width || window.innerWidth
-            this.height = this.height || Math.floor(window.innerWidth * 3 / 4)
+            width = width || window.innerWidth
+            height = height || Math.floor(window.innerWidth * 3 / 4)
 
             /**
              * Set width & height
@@ -347,15 +349,15 @@ export class InterventionRequestPicture {
             if (cropFitOperation) {
                 const cropFitOperationArray = cropFitOperation.split('x')
 
-                this.width = parseInt(cropFitOperationArray[0])
-                this.height = parseInt(cropFitOperationArray[1])
+                width = parseInt(cropFitOperationArray[0])
+                height = parseInt(cropFitOperationArray[1])
             }
 
             if (window.interventionRequestJS) {
                 operations.format = {
                     ...window.interventionRequestJS.mediaOptions,
-                    width: this.width,
-                    height: this.height
+                    width: width,
+                    height: height
                 }
             }
 
@@ -388,8 +390,8 @@ export class InterventionRequestPicture {
                     type={ this.mimeType }
                     data-srcset={ fallbackSources } />,
                 <img
-                    width={ this.width }
-                    height={ this.height }
+                    width={ width }
+                    height={ height }
                     alt={ this.alt || this.src }
                     loading={ this.loading }
                     data-src={ fallbackSources }

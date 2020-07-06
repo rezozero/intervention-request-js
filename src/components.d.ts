@@ -33,7 +33,7 @@ export namespace Components {
          */
         "height": number;
         /**
-          * Loading type Native lazyloading. see https://caniuse.com/#feat=loading-lazy-attr see https://web.dev/native-lazy-loading/  auto: Default lazy-loading behavior of the browser, which is the same as not including the attribute. lazy: Defer loading of the resource until it reaches a calculated distance from the viewport. eager: Load the resource immediately, regardless of where it's located on the page.
+          * Native lazyloading see https://caniuse.com/#feat=loading-lazy-attr see https://web.dev/native-lazy-loading/  auto: Default lazy-loading behavior of the browser, which is the same as not including the attribute. lazy: Defer loading of the resource until it reaches a calculated distance from the viewport. eager: Load the resource immediately, regardless of where it's located on the page.
           * @default auto
          */
         "loading"?: 'lazy' | 'eager' | 'auto';
@@ -42,7 +42,7 @@ export namespace Components {
          */
         "mimeType"?: string;
         /**
-          * Disable url processing source is directly applied as it is in attributes
+          * Disable url processing. Source is directly applied as it is in attributes
          */
         "noProcess"?: boolean;
         /**
@@ -217,7 +217,7 @@ declare namespace LocalJSX {
          */
         "height"?: number;
         /**
-          * Loading type Native lazyloading. see https://caniuse.com/#feat=loading-lazy-attr see https://web.dev/native-lazy-loading/  auto: Default lazy-loading behavior of the browser, which is the same as not including the attribute. lazy: Defer loading of the resource until it reaches a calculated distance from the viewport. eager: Load the resource immediately, regardless of where it's located on the page.
+          * Native lazyloading see https://caniuse.com/#feat=loading-lazy-attr see https://web.dev/native-lazy-loading/  auto: Default lazy-loading behavior of the browser, which is the same as not including the attribute. lazy: Defer loading of the resource until it reaches a calculated distance from the viewport. eager: Load the resource immediately, regardless of where it's located on the page.
           * @default auto
          */
         "loading"?: 'lazy' | 'eager' | 'auto';
@@ -226,7 +226,7 @@ declare namespace LocalJSX {
          */
         "mimeType"?: string;
         /**
-          * Disable url processing source is directly applied as it is in attributes
+          * Disable url processing. Source is directly applied as it is in attributes
          */
         "noProcess"?: boolean;
         /**
