@@ -38,6 +38,16 @@ See details on [StencilJS documentation](https://stenciljs.com/docs/overview)
 ## Attributes
 See all available components attributes [here](src/components/intervention-request/readme.md)
 
+## Styling
+CSS variables applied to image
+```css
+:root {
+    --ir-object-fit: fill;
+    --ir-width: 100%;
+    --ir-height: auto;
+}
+```
+
 ## Global configurations & overrides
 A common configuration can be defined via the global variable `interventionRequestJS` as follows
 ```javascript
