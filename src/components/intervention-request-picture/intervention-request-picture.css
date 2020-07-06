@@ -1,10 +1,15 @@
 :host {
-  display: block;
+    --ir-object-fit: fill;
+    --ir-width: 100%;
+    --ir-height: auto;
+
+    display: block;
 }
 
 img {
-  display: block;
-  max-width: 100%;
-  width: 100%;
-  height: auto;
+    object-fit: var(--ir-object-fit);
+    font-family: 'object-fit';
+    display: block;
+    width: var(--ir-width);
+    height: var(--ir-height);
 }
