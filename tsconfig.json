@@ -17,13 +17,7 @@
         "noImplicitThis": true,
         "noImplicitReturns": true,
         "jsx": "react",
-        "jsxFactory": "h",
-        "baseUrl": ".",
-        "paths": {
-            "~/*": [
-                "src/*"
-            ]
-        }
+        "jsxFactory": "h"
     },
     "include": [
         "src",
