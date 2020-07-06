@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+    <title>Intervention Request</title>
+    <style>
+        * { margin: 0; padding: 0; }
+    </style>
+</head>
+<body>
+    <intervention-request
+        alt="Cherry Blossom"
+        src="cherry-blossom.jpg"
+        width="1920"
+        height="1080"
+        base-url="http://localhost:8484/assets"
+        formats='{
+            "width": 1024,
+            "height": 768,
+            "media": [
+                {"srcset":[{"format":{"fit":"1920x980","quality":80},"rule":"1x"}, {"format":{"fit":"3840x1960","quality":80},"rule":"2x"}], "rule":"(min-width: 1280px)"},
+                {"srcset":[{"format":{"fit":"768x320","quality":80},"rule":"1x"}], "rule":"(min-width: 768px)"},
+                {"srcset":[{"format":{"fit":"400x280","quality":80},"rule":"1x"}]}
+            ]
+        }'
+        force-io>
+    </intervention-request>
+
+    <intervention-request
+        alt="Asphalt"
+        src="asphalt.jpg"
+        classes="class1,class2"
+        base-url="http://localhost:8484/assets"
+        formats='{"width": 1920, "height": 800, "quality": 50}'>
+    </intervention-request>
+
+    <intervention-request
+        alt="Cloudinary"
+        src="sample.jpg"
+        strategy="cloudinary"
+        formats='{
+            "media": [
+                {"srcset":[{"format":{"width":1980, "quality":80}}], "rule":"(min-width: 1280px)"},
+                {"srcset":[{"format":{"width":1024, "quality":80}}], "rule":"(min-width: 768px)"},
+                {"srcset":[{"format":{"width":360, "quality":80}}]}
+            ]
+        }'>
+    </intervention-request>
+
+    <script>
+        /**
+         * Override intervention request default configurations
+         * @type InterventionRequestConfigurations
+         */
+        window.interventionRequestJS = {
+            debug: true,
+
+            /**
+             * Default strategy
+             * Applied on each element without strategy props provided
+             */
+            strategy: 'default',
+
+            /**
+             * Default loading typee
+             */
+            loading: 'lazy',
+
+            /**
+             * Strategies config overrides
+             */
+            strategies: {
+                default: { baseUrl: 'http://intervention.local/assets' },
+                cloudinary: { baseUrl: 'https://res.cloudinary.com/demo/image/upload' }
+
+                /**
+                 * New strategy can be added here
+                 * @type InterventionRequestStrategy
+                 */
+            },
+
+            /**
+             * Default media options
+             * Applied on every media if no props override provided
+             */
+            mediaOptions: {
+                quality: 100,
+                progressive: 0
+            }
+        }
+
+    </script>
+
+    <script type="module" src="/build/intervention-request.esm.js"></script>
+    <script nomodule src="/build/intervention-request.js"></script>
+
+</body>
+</html>
