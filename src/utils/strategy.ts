@@ -14,6 +14,7 @@ export default class Strategy implements InterventionRequestStrategy {
     public ampersand: string = '-'
     public separator: string = ''
     public webp: boolean = false
+    public process: boolean = true
     public operations: InterventionRequestStrategyFormat = {
         format: {
             align: 'a',
@@ -52,6 +53,10 @@ export default class Strategy implements InterventionRequestStrategy {
         this.separator = options.separator || this.separator
         this.webp = options.webp || this.webp
         this.operations = { ...this.operations, ...options.operations }
+
+        if ('process' in options) {
+            this.process = options.process
+        }
 
 
         /**
@@ -123,7 +128,17 @@ export default class Strategy implements InterventionRequestStrategy {
      * @return string
      */
     public formatPath (source: string, operations: InterventionRequestStrategyFormat, baseUrl: string | undefined = undefined, rule: boolean = false): string {
-        let path = `${baseUrl || this.baseUrl}/${this.computedOperations(operations.format)}/${source}`
+        let basePath = baseUrl || this.baseUrl
+        let path = source
+
+        if (this.process) {
+            path = `${this.computedOperations(operations.format)}/${path}`
+        }
+
+        if (basePath) {
+            basePath = basePath.replace(/\+$/, '')
+            path =  `${basePath}/${path}`
+        }
 
         if (rule && operations.rule) {
             path += ` ${operations.rule}`

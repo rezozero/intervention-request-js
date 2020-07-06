@@ -7,10 +7,17 @@
     <style>
         * { margin: 0; padding: 0; }
         picture { border: 1px solid red; }
+        img:not([src]) { border: 2px solid red; }
     </style>
 </head>
 <body>
-    <div style="padding: 100vh 0 0;"></div>
+    <intervention-request
+        alt="My media"
+        src="https://api-biennaledelyon.rezo-zero.dev/assets/w900-h900-q80/14a78bdf/2008_theatre_de_venissieux_02.jpg"
+        no-process
+        force-io
+    >
+    </intervention-request>
     <intervention-request
         alt="1. Cherry Blossom"
         src="cherry-blossom.jpg"

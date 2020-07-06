@@ -3,10 +3,11 @@ import Strategy from './utils/strategy'
 export namespace InterventionRequestStrategies {
     interface Base {
         name: string
-        baseUrl: string
+        baseUrl?: string
         ampersand?: string
         separator?: string
         webp?: boolean
+        process?: boolean
         operations?: Format
     }
 

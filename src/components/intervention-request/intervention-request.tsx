@@ -88,6 +88,13 @@ export class InterventionRequest {
     forceIo?: boolean
 
     /**
+     * Disable url processing
+     * source is directly applied as it is in attributes
+     */
+    @Prop()
+    noProcess?: boolean
+
+    /**
      * Loading type
      * Native lazyloading.
      * see https://caniuse.com/#feat=loading-lazy-attr
@@ -231,6 +238,10 @@ export class InterventionRequest {
             }
         }
 
+        if (this.noProcess) {
+            this.strategy = 'noprocess'
+        }
+
         this.component = this.embed ? 'intervention-request-iframe' : this.component
     }
 
@@ -269,7 +280,8 @@ export class InterventionRequest {
                         force-io={ this.forceIo }
                         loading={ this.loading }
                         media={ this.media }
-                        mimeType={ this.mimeType }/>
+                        mime-type={ this.mimeType }
+                        no-process={ this.noProcess }/>
                 }
                 <slot />
             </Host>

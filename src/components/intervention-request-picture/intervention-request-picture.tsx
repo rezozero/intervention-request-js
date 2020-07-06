@@ -235,8 +235,6 @@ export class InterventionRequestPicture {
         let fallbackSources!: string
         let cropFitOperation = this.crop || this.fit
 
-        // const cropFitOperationArray = cropFitOperation.split('x')
-
         if (this.media && this.media.length) {
             /**
              * Loop thru formats

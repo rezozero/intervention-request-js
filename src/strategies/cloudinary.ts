@@ -10,7 +10,7 @@ const cloudinaryStrategy: InterventionRequestStrategy = {
     baseUrl: 'https://res.cloudinary.com/demo/image/upload',
     ampersand: ',',
     separator: '_',
-    webp: false,
+    webp: false
 }
 
 export default cloudinaryStrategy

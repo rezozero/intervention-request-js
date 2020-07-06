@@ -42,6 +42,10 @@ export namespace Components {
          */
         "mimeType"?: string;
         /**
+          * Disable url processing source is directly applied as it is in attributes
+         */
+        "noProcess"?: boolean;
+        /**
           * Source
          */
         "src": string;
@@ -221,6 +225,10 @@ declare namespace LocalJSX {
           * Mime type
          */
         "mimeType"?: string;
+        /**
+          * Disable url processing source is directly applied as it is in attributes
+         */
+        "noProcess"?: boolean;
         /**
           * Source
          */

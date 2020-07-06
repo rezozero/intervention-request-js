@@ -1,5 +1,6 @@
 import defaultStrategy from '../strategies/default'
 import cloudinaryStrategy from '../strategies/cloudinary'
+import noprocessStrategy from '../strategies/noprocess'
 import Strategy from '../utils/strategy'
 import { InterventionRequestStrategies } from '../strategies'
 
@@ -10,7 +11,8 @@ import { InterventionRequestStrategies } from '../strategies'
  */
 const strategiesList: InterventionRequestStrategies = {
     default: new Strategy(defaultStrategy),
-    cloudinary: new Strategy(cloudinaryStrategy)
+    cloudinary: new Strategy(cloudinaryStrategy),
+    noprocess: new Strategy(noprocessStrategy)
 }
 
 export default strategiesList
