@@ -120,6 +120,7 @@ export class InterventionRequestPicture {
         if (window.interventionRequestJS && window.interventionRequestJS.debug) {
             console.log('src changed', this.observer)
         }
+
         this.resetMedia()
         this.initObserver()
     }
@@ -215,6 +216,8 @@ export class InterventionRequestPicture {
      */
     public onReady (): void {
         this.loaded = true
+
+        console.log('media ready', this.src)
 
         if (this.loadingCompleted) {
             this.loadingCompleted.emit(true)
@@ -328,7 +331,8 @@ export class InterventionRequestPicture {
                                     loading={ this.loading }
                                     data-src={ fallbackSources }
                                     data-srcSet={ srcset.join(', ') }
-                                    onLoad={ () => this.onReady() } />
+                                    onLoad={ () => this.onReady() }
+                                    onError={ () => this.onError() } />
                             )
                         }
                     }
@@ -395,8 +399,8 @@ export class InterventionRequestPicture {
                     alt={ this.alt || this.src }
                     loading={ this.loading }
                     data-src={ fallbackSources }
-                    onLoad={ this.onReady }
-                    onError={ this.onError }/>
+                    onLoad={ () => this.onReady() }
+                    onError={ () => this.onError() }/>
             )
         }
 
