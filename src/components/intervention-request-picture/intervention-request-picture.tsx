@@ -217,8 +217,6 @@ export class InterventionRequestPicture {
     public onReady (): void {
         this.loaded = true
 
-        console.log('media ready', this.src)
-
         if (this.loadingCompleted) {
             this.loadingCompleted.emit(true)
         }
