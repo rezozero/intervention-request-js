@@ -198,6 +198,9 @@ export class InterventionRequest {
         if (this.src) {
             if (this.mimeType) {
                 switch (this.mimeType) {
+                    case 'image/heif':
+                    case 'image/heic':
+                    case 'image/avif':
                     case 'image/webp':
                     case 'image/jpeg':
                     case 'image/png':
@@ -219,6 +222,9 @@ export class InterventionRequest {
                 switch (extractFileExtension(this.src)) {
                     case 'webp':
                     case 'jpg':
+                    case 'heif':
+                    case 'heic':
+                    case 'avif':
                     case 'jpeg':
                     case 'png':
                     case 'gif':

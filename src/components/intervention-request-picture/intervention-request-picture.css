@@ -1,5 +1,6 @@
 :host {
     --ir-object-fit: fill;
+    --ir-object-position: inherit;
     --ir-width: 100%;
     --ir-height: auto;
 
@@ -8,6 +9,7 @@
 
 img {
     object-fit: var(--ir-object-fit);
+    object-position: var(--ir-object-position);
     font-family: 'object-fit';
     display: block;
     width: var(--ir-width);
