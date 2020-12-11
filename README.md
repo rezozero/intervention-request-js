@@ -43,6 +43,7 @@ CSS variables applied to image
 ```css
 :root {
     --ir-object-fit: fill;
+    --ir-object-position: inherit;
     --ir-width: 100%;
     --ir-height: auto;
 }
