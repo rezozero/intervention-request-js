@@ -3,6 +3,8 @@
     --ir-object-position: inherit;
     --ir-width: 100%;
     --ir-height: auto;
+    --ir-max-width: none;
+    --ir-max-height: none;
 
     display: block;
 }
@@ -14,4 +16,6 @@ img {
     display: block;
     width: var(--ir-width);
     height: var(--ir-height);
+    max-width: var(--ir-max-width);
+    max-height: var(--ir-max-height);
 }
