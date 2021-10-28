@@ -1,6 +1,6 @@
 {
   "name": "@rezo-zero/intervention-request",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "JS client for building HTML picture tags using Intervention Request images",
   "repository": "git@github.com:rezozero/intervention-request-js.git",
   "main": "dist/index.js",
