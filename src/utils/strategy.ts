@@ -3,7 +3,12 @@
  * @description Build providers default strategy
  * @author ravorona
  */
-import { InterventionRequestStrategyOperations, InterventionRequestStrategy, InterventionRequestStrategyFormat } from '../strategies'
+import {
+    InterventionRequestStrategyOperations,
+    InterventionRequestStrategy,
+    InterventionRequestStrategyFormat
+} from '../strategies'
+import { InterventionRequestConfigurations } from "../intervention-request"
 
 export default class Strategy implements InterventionRequestStrategy {
     /**
@@ -38,7 +43,7 @@ export default class Strategy implements InterventionRequestStrategy {
      * Default media options
      * @return InterventionRequestOperations
      */
-    private readonly defaultMediaOptions: InterventionRequestStrategyFormat = {
+    private defaultMediaOptions: InterventionRequestStrategyFormat = {
         rule: '100vw'
     }
 
@@ -52,42 +57,18 @@ export default class Strategy implements InterventionRequestStrategy {
         this.ampersand = options.ampersand || this.ampersand
         this.separator = options.separator || this.separator
         this.webp = options.webp || this.webp
-        this.operations = { ...this.operations, ...options.operations }
+        this.operations = {...this.operations, ...options.operations}
 
         if ('process' in options) {
             this.process = options.process
         }
 
-
         /**
          * Apply override
          * from global variable
          */
-        if (window.interventionRequestJS) {
-            /**
-             * Override default media options
-             * If global configuration is set
-             */
-            if (window.interventionRequestJS.mediaOptions) {
-                this.defaultMediaOptions = {
-                    ...this.defaultMediaOptions,
-                    ...window.interventionRequestJS.mediaOptions
-                }
-            }
-
-            /**
-             * Override strategy configuration
-             * By global strategies config
-             */
-            if (window.interventionRequestJS.strategies && window.interventionRequestJS.strategies[this.name]) {
-                const strategyOverride = window.interventionRequestJS.strategies[this.name]
-
-                this.baseUrl = strategyOverride.baseUrl || this.baseUrl
-                this.ampersand = strategyOverride.ampersand || this.ampersand
-                this.separator = strategyOverride.separator || this.separator
-                this.webp = strategyOverride.webp || this.webp
-                this.operations = { ...this.operations, ...strategyOverride.operations }
-            }
+        if (window?.interventionRequestJS) {
+            this.mergeConfigurations(window.interventionRequestJS)
         }
     }
 
@@ -96,7 +77,7 @@ export default class Strategy implements InterventionRequestStrategy {
      * @param format - image format
      * @return string
      */
-    private computedOperations (format: InterventionRequestStrategyOperations): string {
+    private computedOperations(format: InterventionRequestStrategyOperations): string {
         let computedOperations = []
 
         /**
@@ -127,7 +108,7 @@ export default class Strategy implements InterventionRequestStrategy {
      * @param rule - media rule
      * @return string
      */
-    public formatPath (source: string, operations: InterventionRequestStrategyFormat, baseUrl: string | undefined = undefined, rule: boolean = false): string {
+    public formatPath(source: string, operations: InterventionRequestStrategyFormat, baseUrl: string | undefined = undefined, rule: boolean = false): string {
         let basePath = baseUrl || this.baseUrl
         let path = source
 
@@ -137,7 +118,7 @@ export default class Strategy implements InterventionRequestStrategy {
 
         if (basePath) {
             basePath = basePath.replace(/\+$/, '')
-            path =  `${basePath}/${path}`
+            path = `${basePath}/${path}`
         }
 
         if (rule && operations.rule) {
@@ -145,5 +126,34 @@ export default class Strategy implements InterventionRequestStrategy {
         }
 
         return path
+    }
+
+    /**
+     * Merge configurations
+     * @param configurations - InterventionRequestConfigurations
+     */
+    public mergeConfigurations(configurations: InterventionRequestConfigurations) {
+        /**
+         * Override default media options
+         */
+        if (configurations.mediaOptions) {
+            this.defaultMediaOptions = {
+                ...this.defaultMediaOptions,
+                ...configurations.mediaOptions
+            }
+        }
+
+        /**
+         * Override strategy configuration
+         */
+        if (configurations.strategies && configurations.strategies[this.name]) {
+            const strategyOverride = configurations.strategies[this.name]
+
+            this.baseUrl = strategyOverride.baseUrl || this.baseUrl
+            this.ampersand = strategyOverride.ampersand || this.ampersand
+            this.separator = strategyOverride.separator || this.separator
+            this.webp = strategyOverride.webp || this.webp
+            this.operations = {...this.operations, ...strategyOverride.operations}
+        }
     }
 }
