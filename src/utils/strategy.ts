@@ -67,7 +67,7 @@ export default class Strategy implements InterventionRequestStrategy {
          * Apply override
          * from global variable
          */
-        if (window && window.interventionRequestJS) {
+        if (typeof window !== 'undefined' && window.interventionRequestJS) {
             this.mergeConfigurations(window.interventionRequestJS)
         }
     }
