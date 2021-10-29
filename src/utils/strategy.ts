@@ -44,7 +44,8 @@ export default class Strategy implements InterventionRequestStrategy {
      * @return InterventionRequestOperations
      */
     private defaultMediaOptions: InterventionRequestStrategyFormat = {
-        rule: '100vw'
+        rule: '100vw',
+        format: {}
     }
 
     /**
@@ -137,8 +138,8 @@ export default class Strategy implements InterventionRequestStrategy {
          * Override default media options
          */
         if (configurations.mediaOptions) {
-            this.defaultMediaOptions = {
-                ...this.defaultMediaOptions,
+            this.defaultMediaOptions.format = {
+                ...this.defaultMediaOptions.format,
                 ...configurations.mediaOptions
             }
         }
