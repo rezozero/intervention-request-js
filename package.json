@@ -4,7 +4,7 @@
   "description": "JS client for building HTML picture tags using Intervention Request images",
   "repository": "git@github.com:rezozero/intervention-request-js.git",
   "main": "dist/index.cjs.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "es2015": "dist/esm/index.mjs",
   "es2017": "dist/esm/index.mjs",
   "types": "dist/types/index.d.ts",
