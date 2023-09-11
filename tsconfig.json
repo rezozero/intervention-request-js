@@ -17,11 +17,18 @@
         "noImplicitThis": true,
         "noImplicitReturns": true,
         "jsx": "react",
-        "jsxFactory": "h"
+        "jsxFactory": "h",
+        "baseUrl": ".",
+        "paths": {
+            "~/*": [
+                "src/*"
+            ]
+        }
     },
     "include": [
         "src",
-        "types/jsx.d.ts"
+        "types/jsx.d.ts",
+        "puppeteer.d.ts"
     ],
     "exclude": [
         "node_modules"

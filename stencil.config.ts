@@ -3,6 +3,9 @@ import { Config } from '@stencil/core';
 export const config: Config = {
     namespace: 'intervention-request',
     taskQueue: 'async',
+    extras: {
+        enableImportInjection: true,
+    },
     devServer: {
         logRequests: true
     },

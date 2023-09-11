@@ -1,5 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { InterventionRequestSvg } from './intervention-request-svg';
+import { InterventionRequestSvg } from '~/components/intervention-request-svg/intervention-request-svg';
 
 describe('intervention-request-svg', () => {
     it('renders', async () => {

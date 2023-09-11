@@ -6,7 +6,13 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { InterventionRequestMedia } from "./intervention-request";
+export { InterventionRequestMedia } from "./intervention-request";
 export namespace Components {
+    /**
+     * InterventionRequest
+     * @description Wrapper component
+     * @author ravorona
+     */
     interface InterventionRequest {
         /**
           * Alt attribute
@@ -58,6 +64,11 @@ export namespace Components {
          */
         "width": number;
     }
+    /**
+     * InterventionRequest Iframe
+     * @description Iframe component
+     * @author ravorona
+     */
     interface InterventionRequestIframe {
         /**
           * Alt attribute
@@ -85,6 +96,11 @@ export namespace Components {
          */
         "width": number;
     }
+    /**
+     * InterventionRequest Picture
+     * @description Picture component
+     * @author ravorona
+     */
     interface InterventionRequestPicture {
         /**
           * Alt attribute
@@ -158,19 +174,38 @@ export namespace Components {
         "width": number;
     }
 }
+export interface InterventionRequestPictureCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLInterventionRequestPictureElement;
+}
 declare global {
+    /**
+     * InterventionRequest
+     * @description Wrapper component
+     * @author ravorona
+     */
     interface HTMLInterventionRequestElement extends Components.InterventionRequest, HTMLStencilElement {
     }
     var HTMLInterventionRequestElement: {
         prototype: HTMLInterventionRequestElement;
         new (): HTMLInterventionRequestElement;
     };
+    /**
+     * InterventionRequest Iframe
+     * @description Iframe component
+     * @author ravorona
+     */
     interface HTMLInterventionRequestIframeElement extends Components.InterventionRequestIframe, HTMLStencilElement {
     }
     var HTMLInterventionRequestIframeElement: {
         prototype: HTMLInterventionRequestIframeElement;
         new (): HTMLInterventionRequestIframeElement;
     };
+    /**
+     * InterventionRequest Picture
+     * @description Picture component
+     * @author ravorona
+     */
     interface HTMLInterventionRequestPictureElement extends Components.InterventionRequestPicture, HTMLStencilElement {
     }
     var HTMLInterventionRequestPictureElement: {
@@ -191,6 +226,11 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    /**
+     * InterventionRequest
+     * @description Wrapper component
+     * @author ravorona
+     */
     interface InterventionRequest {
         /**
           * Alt attribute
@@ -242,6 +282,11 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
+    /**
+     * InterventionRequest Iframe
+     * @description Iframe component
+     * @author ravorona
+     */
     interface InterventionRequestIframe {
         /**
           * Alt attribute
@@ -269,6 +314,11 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
+    /**
+     * InterventionRequest Picture
+     * @description Picture component
+     * @author ravorona
+     */
     interface InterventionRequestPicture {
         /**
           * Alt attribute
@@ -309,7 +359,7 @@ declare namespace LocalJSX {
         /**
           * Loading completed event emitter
          */
-        "onLoadingCompleted"?: (event: CustomEvent<boolean>) => void;
+        "onLoadingCompleted"?: (event: InterventionRequestPictureCustomEvent<boolean>) => void;
         /**
           * Source
          */
@@ -356,8 +406,23 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * InterventionRequest
+             * @description Wrapper component
+             * @author ravorona
+             */
             "intervention-request": LocalJSX.InterventionRequest & JSXBase.HTMLAttributes<HTMLInterventionRequestElement>;
+            /**
+             * InterventionRequest Iframe
+             * @description Iframe component
+             * @author ravorona
+             */
             "intervention-request-iframe": LocalJSX.InterventionRequestIframe & JSXBase.HTMLAttributes<HTMLInterventionRequestIframeElement>;
+            /**
+             * InterventionRequest Picture
+             * @description Picture component
+             * @author ravorona
+             */
             "intervention-request-picture": LocalJSX.InterventionRequestPicture & JSXBase.HTMLAttributes<HTMLInterventionRequestPictureElement>;
             "intervention-request-svg": LocalJSX.InterventionRequestSvg & JSXBase.HTMLAttributes<HTMLInterventionRequestSvgElement>;
         }
