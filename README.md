@@ -46,6 +46,7 @@ CSS variables applied to image
     --ir-object-position: inherit;
     --ir-width: 100%;
     --ir-height: auto;
+    --ir-aspect-ratio: inherit;
 }
 ```
 
