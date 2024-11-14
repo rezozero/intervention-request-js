@@ -5,6 +5,8 @@
     --ir-height: auto;
     --ir-max-width: none;
     --ir-max-height: none;
+    --ir-aspect-ratio: inherit;
+
 
     display: block;
 }
@@ -18,4 +20,5 @@ img {
     height: var(--ir-height);
     max-width: var(--ir-max-width);
     max-height: var(--ir-max-height);
+    aspect-ratio: var(--ir-aspect-ratio);
 }
