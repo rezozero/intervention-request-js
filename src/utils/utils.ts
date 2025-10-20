@@ -1,9 +1,10 @@
+import { parseURL, stringifyParsedURL } from "ufo"
+
 /**
  * InterventionRequest Utils
  * @description Useful functions
  */
 
-import { parseURL, stringifyParsedURL } from "ufo"
 
 /**
  * Check if file contain webp extension

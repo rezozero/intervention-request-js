@@ -4,7 +4,7 @@ import Strategy from '../../utils/strategy'
 import { addExtensionToSrc, isWebp } from '../../utils/utils'
 import { InterventionRequestFormat, InterventionRequestMedia } from '../../intervention-request'
 import { InterventionRequestStrategyFormat } from '../../strategies'
-import { parseURL, stringifyParsedURL, parseFilename } from 'ufo'
+import { parseFilename } from 'ufo'
 
 /**
  * InterventionRequest Picture
