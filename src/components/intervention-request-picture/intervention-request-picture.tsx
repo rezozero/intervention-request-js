@@ -1,9 +1,10 @@
 import { Component, Prop, Host, h, Element, State, Event, EventEmitter, Watch } from '@stencil/core'
 import strategies from '../../strategies/index'
 import Strategy from '../../utils/strategy'
-import { isWebp } from '../../utils/utils'
+import { addExtensionToSrc, isWebp } from '../../utils/utils'
 import { InterventionRequestFormat, InterventionRequestMedia } from '../../intervention-request'
 import { InterventionRequestStrategyFormat } from '../../strategies'
+import { parseURL, stringifyParsedURL, parseFilename } from 'ufo'
 
 /**
  * InterventionRequest Picture
@@ -131,8 +132,10 @@ export class InterventionRequestPicture {
      * @return void
      */
     componentWillLoad(): void {
+        const filename = parseFilename(this.src, { strict: true})
+
         this.strategyInstance = strategies[this.strategy]
-        this.isWebp = isWebp(this.src)
+        this.isWebp = isWebp(filename)
         this.nativeLoading = ('loading' in HTMLImageElement.prototype) && !this.forceIo
 
         if (!this.strategyInstance && window.interventionRequestJS && window.interventionRequestJS.debug) {
@@ -290,7 +293,11 @@ export class InterventionRequestPicture {
                                 <source
                                     type={ 'image/webp' }
                                     media={ format.rule }
-                                    data-srcset={ srcset.join(', ').replace(new RegExp(this.src, 'g'), `${this.src}.webp`) } />
+                                    data-srcset={ srcset
+                                        .map(srcsetItem => addExtensionToSrc(srcsetItem, 'webp'))
+                                        .join(', ') 
+                                    } 
+                                />
                             )
                         }
 
@@ -379,7 +386,7 @@ export class InterventionRequestPicture {
                 mediaElements.push(
                     <source
                         type={ 'image/webp' }
-                        data-srcset={ `${ fallbackSources }.webp` } />
+                        data-srcset={ addExtensionToSrc(fallbackSources, 'webp') } />
                 )
             }
 

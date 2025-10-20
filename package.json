@@ -28,5 +28,8 @@
     "@types/jest": "^29.5.4",
     "puppeteer": "^21.1.1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "ufo": "^1.6.1"
+  }
 }
