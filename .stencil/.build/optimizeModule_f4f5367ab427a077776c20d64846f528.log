@@ -1,1 +1,0 @@
-function n(n){return r(n,"webp")}function r(n,r){return t(n)===r}function t(n){return n.split(".").pop().toLowerCase()}export{r as c,t as e,n as i};
